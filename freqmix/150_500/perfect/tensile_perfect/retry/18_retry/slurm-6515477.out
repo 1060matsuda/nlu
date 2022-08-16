@@ -1,0 +1,88 @@
+LAMMPS (29 Sep 2021 - Update 1)
+KOKKOS mode is enabled (../kokkos.cpp:97)
+  will use up to 2 GPU(s) per node
+  using 1 OpenMP thread(s) per MPI task
+Reading data file ...
+  orthogonal box = (0.0000000 0.0000000 0.0000000) to (4143.0751 57.106480 57.106480)
+  64 by 1 by 1 MPI processor grid
+  reading atoms ...
+  360800 atoms
+  read_data CPU = 4.647 seconds
+WARNING: Using 'neigh_modify every 1 delay 0 check yes' setting during minimization (../min.cpp:188)
+Neighbor list info ...
+  update every 1 steps, delay 0 steps, check yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 7.6
+  ghost atom cutoff = 7.6
+  binsize = 7.6, bins = 546 8 8
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair eam/alloy/kk, perpetual
+      attributes: full, newton off, kokkos_device
+      pair build: full/bin/kk/device
+      stencil: full/bin/3d
+      bin: kk/device
+Setting up cg/kk style minimization ...
+  Unit style    : metal
+  Current step  : 0
+WARNING: Energy due to 1 extra global DOFs will be included in minimizer energies
+WARNING: Fixes cannot yet send exchange data in Kokkos communication, switching to classic exchange/border communication (../comm_kokkos.cpp:581)
+Per MPI rank memory allocation (min/avg/max) = 2.376 | 4.616 | 9.668 Mbytes
+Step Temp E_pair E_mol TotEng Press Volume 
+       0            0   -1486645.8            0   -1486645.8   -52.715618     13511190 
+       5            0   -1428997.9            0   -1428997.9   -4241.4933     13510011 
+Loop time of 1.35627 on 64 procs for 5 steps with 360800 atoms
+
+88.1% CPU use with 64 MPI tasks x 1 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = linesearch alpha is zero
+  Energy initial, next-to-last, final = 
+     -1486645.77951318   -1486647.6284912  -1428997.94095791
+  Force two-norm initial, final = 1333.6748 107299.61
+  Force max component initial, final = 1333.6559 107299.58
+  Final line search alpha, max atom move = 3.2660501e-13 3.5044579e-08
+  Iterations, force evaluations = 5 52
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0.16997    | 0.28721    | 0.52591    |  25.9 | 21.18
+Neigh   | 0.0097461  | 0.015526   | 0.028881   |   2.6 |  1.14
+Comm    | 0.0024383  | 0.097926   | 0.30141    |  41.9 |  7.22
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 0.9556     |            |       | 70.46
+
+Nlocal:        5637.50 ave       18400 max           0 min
+Histogram: 44 0 0 0 0 0 0 0 1 19
+Nghost:        5643.81 ave       18428 max           0 min
+Histogram: 43 1 0 0 0 0 0 1 1 18
+Neighs:         0.00000 ave           0 max           0 min
+Histogram: 64 0 0 0 0 0 0 0 0 0
+FullNghs:      775772.0 ave  3.0912e+06 max           0 min
+Histogram: 44 0 0 0 0 0 10 0 1 9
+
+Total # of neighbors = 49649400
+Ave neighs/atom = 137.60920
+Neighbor list builds = 2
+Dangerous builds = 0
+Initial Length, L0: 4142.95461920741
+119200 atoms in group dcr
+800 atoms in group source
+800 atoms in group detector
+400 atoms in group edge
+400 atoms in group edge_buf
+120000 atoms in group buffer
+ERROR: Variable peratomxx: Atom-style variable in equal-style variable formula (../variable.cpp:1915)
+Last command: variable	peratomxt atom $(v_peratomxx)
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[64259,1],6]
+  Exit code:    1
+--------------------------------------------------------------------------

@@ -1,0 +1,304 @@
+LAMMPS (14 Dec 2021)
+Reading data file ...
+  orthogonal box = (0 0 0) to (5427.9709 57.10648 57.10648)
+  64 by 1 by 1 MPI processor grid
+  reading atoms ...
+  720800 atoms
+  read_data CPU = 1.632 seconds
+800 atoms in group d1
+800 atoms in group d2
+800 atoms in group d3
+800 atoms in group d4
+800 atoms in group d5
+800 atoms in group d6
+800 atoms in group d7
+800 atoms in group d8
+800 atoms in group d9
+800 atoms in group d10
+800 atoms in group d11
+800 atoms in group d12
+800 atoms in group d13
+800 atoms in group d14
+800 atoms in group d15
+800 atoms in group d16
+800 atoms in group d17
+800 atoms in group d18
+800 atoms in group d19
+800 atoms in group d20
+800 atoms in group d21
+800 atoms in group d22
+800 atoms in group d23
+800 atoms in group d24
+800 atoms in group d25
+800 atoms in group d26
+800 atoms in group d27
+800 atoms in group d28
+800 atoms in group d29
+800 atoms in group d30
+800 atoms in group d31
+WARNING: Using 'neigh_modify every 1 delay 0 check yes' setting during minimization (../min.cpp:187)
+Neighbor list info ...
+  update every 1 steps, delay 0 steps, check yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 7.6
+  ghost atom cutoff = 7.6
+  binsize = 3.8, bins = 1429 16 16
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair eam/alloy, perpetual
+      attributes: half, newton on
+      pair build: half/bin/atomonly/newton
+      stencil: half/bin/3d
+      bin: standard
+Setting up cg style minimization ...
+  Unit style    : metal
+  Current step  : 0
+Per MPI rank memory allocation (min/avg/max) = 4.355 | 12.11 | 20.82 Mbytes
+Step Temp E_pair E_mol TotEng Press 
+       0            0   -2970722.4            0   -2970722.4   -39.963143 
+       1            0   -2970724.3            0   -2970724.3   -46.892508 
+       2            0   -2970724.4            0   -2970724.4   -48.396528 
+       3            0   -2970724.5            0   -2970724.5   -47.831632 
+       4            0   -2970724.5            0   -2970724.5   -48.159814 
+       5            0   -2970724.5            0   -2970724.5   -48.628927 
+       6            0   -2970724.5            0   -2970724.5    -48.79452 
+       7            0   -2970724.5            0   -2970724.5   -48.875009 
+       8            0   -2970724.5            0   -2970724.5    -48.94165 
+       9            0   -2970724.5            0   -2970724.5   -49.026661 
+      10            0   -2970724.5            0   -2970724.5   -49.074719 
+      11            0   -2970724.5            0   -2970724.5   -49.107905 
+      12            0   -2970724.5            0   -2970724.5    -49.13744 
+      13            0   -2970724.5            0   -2970724.5   -49.171243 
+      14            0   -2970724.5            0   -2970724.5   -49.194761 
+      15            0   -2970724.5            0   -2970724.5   -49.212082 
+      16            0   -2970724.5            0   -2970724.5   -49.228956 
+      17            0   -2970724.5            0   -2970724.5   -49.246991 
+      18            0   -2970724.5            0   -2970724.5   -49.260749 
+      19            0   -2970724.5            0   -2970724.5   -49.271578 
+      20            0   -2970724.5            0   -2970724.5   -49.282489 
+      21            0   -2970724.5            0   -2970724.5   -49.293699 
+      22            0   -2970724.5            0   -2970724.5    -49.30276 
+      23            0   -2970724.5            0   -2970724.5   -49.310044 
+      24            0   -2970724.5            0   -2970724.5    -49.31655 
+      25            0   -2970724.5            0   -2970724.5   -49.322459 
+      26            0   -2970724.5            0   -2970724.5   -49.328792 
+      27            0   -2970724.5            0   -2970724.5   -49.334748 
+      28            0   -2970724.5            0   -2970724.5   -49.339502 
+      29            0   -2970724.5            0   -2970724.5    -49.34382 
+      30            0   -2970724.5            0   -2970724.5   -49.348754 
+      31            0   -2970724.5            0   -2970724.5   -49.353459 
+      32            0   -2970724.5            0   -2970724.5   -49.357238 
+      33            0   -2970724.5            0   -2970724.5   -49.360357 
+      34            0   -2970724.5            0   -2970724.5   -49.364429 
+      35            0   -2970724.5            0   -2970724.5   -49.368253 
+      36            0   -2970724.5            0   -2970724.5   -49.371262 
+      37            0   -2970724.5            0   -2970724.5   -49.374016 
+      38            0   -2970724.5            0   -2970724.5    -49.37715 
+      39            0   -2970724.5            0   -2970724.5    -49.37715 
+Loop time of 6.59868 on 64 procs for 39 steps with 720800 atoms
+
+99.9% CPU use with 64 MPI tasks x no OpenMP threads
+
+Minimization stats:
+  Stopping criterion = linesearch alpha is zero
+  Energy initial, next-to-last, final = 
+      -2970722.4157376  -2970724.46175216  -2970724.46175216
+  Force two-norm initial, final = 7.1080974 0.0013972001
+  Force max component initial, final = 0.19826945 2.0050408e-05
+  Final line search alpha, max atom move = 0.00390625 7.8321904e-08
+  Iterations, force evaluations = 39 93
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 4.6896e-05 | 2.9663     | 6.3143     | 175.4 | 44.95
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 3.1042e-05 | 0.16426    | 3.4282     | 143.9 |  2.49
+Output  | 0.005626   | 0.0058769  | 0.0068931  |   0.2 |  0.09
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 3.462      |            |       | 52.47
+
+Nlocal:        11262.5 ave       24000 max           0 min
+Histogram: 32 2 0 0 0 0 0 0 0 30
+Nghost:          10417 ave       22560 max           0 min
+Histogram: 32 0 2 0 0 0 0 0 0 30
+Neighs:         944988 ave 2.01662e+06 max           0 min
+Histogram: 32 2 0 0 0 0 0 0 0 30
+
+Total # of neighbors = 60479200
+Ave neighs/atom = 83.90566
+Neighbor list builds = 0
+Dangerous builds = 0
+WARNING: Using 'neigh_modify every 1 delay 0 check yes' setting during minimization (../min.cpp:187)
+Setting up cg style minimization ...
+  Unit style    : metal
+  Current step  : 39
+WARNING: Energy due to 3 extra global DOFs will be included in minimizer energies
+Per MPI rank memory allocation (min/avg/max) = 4.355 | 12.11 | 20.82 Mbytes
+Step Temp E_pair E_mol TotEng Press Volume 
+      39            0   -2970724.5            0   -2970724.5    -49.37715     17701428 
+      40            0   -2970724.5            0   -2970724.5    18.969652     17699992 
+      41            0   -2970724.5            0   -2970724.5   0.67578574     17700376 
+      42            0   -2970724.5            0   -2970724.5   -0.5677604     17700402 
+      43            0   -2970724.5            0   -2970724.5  0.014475399     17700390 
+      44            0   -2970724.5            0   -2970724.5 -0.0060778098     17700390 
+      45            0   -2970724.5            0   -2970724.5  -0.00607781     17700390 
+Loop time of 4.79532 on 64 procs for 6 steps with 720800 atoms
+
+100.0% CPU use with 64 MPI tasks x no OpenMP threads
+
+Minimization stats:
+  Stopping criterion = linesearch alpha is zero
+  Energy initial, next-to-last, final = 
+     -2970724.46175217  -2970724.52230952  -2970724.52230952
+  Force two-norm initial, final = 1162.6243 0.15599367
+  Force max component initial, final = 822.0822 0.109416
+  Final line search alpha, max atom move = 2.6240178e-07 2.8710952e-08
+  Iterations, force evaluations = 6 47
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 2.2787e-05 | 1.6186     | 3.3269     | 127.5 | 33.75
+Neigh   | 0.0001742  | 0.58709    | 1.292      |  80.2 | 12.24
+Comm    | 0.00044277 | 0.092332   | 1.7916     | 100.1 |  1.93
+Output  | 0.00071424 | 0.00072946 | 0.00076002 |   0.0 |  0.02
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 2.497      |            |       | 52.06
+
+Nlocal:        11262.5 ave       24000 max           0 min
+Histogram: 32 2 0 0 0 0 0 0 0 30
+Nghost:          10417 ave       22560 max           0 min
+Histogram: 32 0 2 0 0 0 0 0 0 30
+Neighs:         944988 ave 2.01758e+06 max           0 min
+Histogram: 32 2 0 0 0 0 0 0 0 30
+
+Total # of neighbors = 60479200
+Ave neighs/atom = 83.90566
+Neighbor list builds = 20
+Dangerous builds = 19
+WARNING: Using 'neigh_modify every 1 delay 0 check yes' setting during minimization (../min.cpp:187)
+Setting up cg style minimization ...
+  Unit style    : metal
+  Current step  : 45
+Per MPI rank memory allocation (min/avg/max) = 4.355 | 12.12 | 20.82 Mbytes
+Step Temp E_pair E_mol TotEng Press 
+      45            0   -2970724.5            0   -2970724.5 -0.0060778099 
+      46            0   -2970724.5            0   -2970724.5 -0.018793648 
+      47            0   -2970724.5            0   -2970724.5 -0.023370375 
+      48            0   -2970724.5            0   -2970724.5 -0.025380438 
+      49            0   -2970724.5            0   -2970724.5 -0.026941437 
+      50            0   -2970724.5            0   -2970724.5 -0.028473958 
+      51            0   -2970724.5            0   -2970724.5 -0.028473958 
+Loop time of 1.72233 on 64 procs for 6 steps with 720800 atoms
+
+100.0% CPU use with 64 MPI tasks x no OpenMP threads
+
+Minimization stats:
+  Stopping criterion = linesearch alpha is zero
+  Energy initial, next-to-last, final = 
+     -2970724.52230952  -2970724.52231508  -2970724.52231508
+  Force two-norm initial, final = 0.0093997097 0.00086076019
+  Force max component initial, final = 0.00024950533 1.9968277e-05
+  Final line search alpha, max atom move = 0.015625 3.1200432e-07
+  Iterations, force evaluations = 6 23
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 1.1161e-05 | 0.77945    | 1.6497     |  89.9 | 45.26
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 7.946e-06  | 0.042913   | 0.88442    |  73.3 |  2.49
+Output  | 0.00072816 | 0.00075072 | 0.0007663  |   0.0 |  0.04
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 0.8992     |            |       | 52.21
+
+Nlocal:        11262.5 ave       24000 max           0 min
+Histogram: 32 2 0 0 0 0 0 0 0 30
+Nghost:          10417 ave       22560 max           0 min
+Histogram: 32 0 2 0 0 0 0 0 0 30
+Neighs:         944988 ave 2.01758e+06 max           0 min
+Histogram: 32 2 0 0 0 0 0 0 0 30
+
+Total # of neighbors = 60479200
+Ave neighs/atom = 83.90566
+Neighbor list builds = 0
+Dangerous builds = 0
+WARNING: One or more atoms are time integrated more than once (../modify.cpp:281)
+Setting up Verlet run ...
+  Unit style    : metal
+  Current step  : 51
+  Time step     : 0.001
+ERROR on proc 15: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 16: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 17: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 18: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 19: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 20: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 21: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 22: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 23: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 24: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 25: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 26: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 27: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 28: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 29: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 30: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 31: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 0: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 1: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 2: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 3: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 4: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 5: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 6: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 7: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 8: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 9: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 10: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 11: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 12: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 13: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 14: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 46: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 47: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 48: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 49: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 50: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 51: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 52: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 53: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 54: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 55: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 56: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 57: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 58: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 59: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 60: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 61: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 62: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 63: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 32: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 33: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 34: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 35: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 36: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 37: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 38: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 39: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 40: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 41: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 42: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 43: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 44: Substitution for illegal variable u (../input.cpp:612)
+ERROR on proc 45: Substitution for illegal variable u (../input.cpp:612)
+--------------------------------------------------------------------------
+MPI_ABORT was invoked on rank 48 in communicator MPI_COMM_WORLD
+with errorcode 1.
+
+NOTE: invoking MPI_ABORT causes Open MPI to kill all MPI processes.
+You may or may not see output from other processes, depending on
+exactly when Open MPI kills them.
+--------------------------------------------------------------------------
+[r231n01:23975] 63 more processes have sent help message help-mpi-api.txt / mpi-abort
+[r231n01:23975] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages

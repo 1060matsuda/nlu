@@ -1,0 +1,28 @@
+LAMMPS (29 Sep 2021 - Update 1)
+KOKKOS mode is enabled (../kokkos.cpp:97)
+  will use up to 1 GPU(s) per node
+  using 1 OpenMP thread(s) per MPI task
+Reading data file ...
+  orthogonal box = (0.0000000 0.0000000 0.0000000) to (4143.0751 57.106480 57.106480)
+  64 by 1 by 1 MPI processor grid
+  reading atoms ...
+  360800 atoms
+  read_data CPU = 5.030 seconds
+800 atoms in group source
+800 atoms in group detector
+400 atoms in group edge
+400 atoms in group edge_buf
+120000 atoms in group buffer
+ERROR: Thermo keyword in variable requires thermo to use/init press (../thermo.cpp:1406)
+Last command: variable p0 equal ${oshikko}
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[43090,1],5]
+  Exit code:    1
+--------------------------------------------------------------------------

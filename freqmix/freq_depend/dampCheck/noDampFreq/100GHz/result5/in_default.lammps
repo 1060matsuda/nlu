@@ -1,0 +1,196 @@
+#################################
+#two psrts have to be corrected
+#Vacancy >> type : Fe Fe Fe Fe Fe Fe Fe Fe Fe
+#Cu      >> type : Fe Fe Fe Fe Fe Fe Fe Fe Fe Cu
+#################################
+
+####
+#variable nvt_temp      equal 0.1                     # Temperature
+variable npt_temp      equal 0.1
+####
+#系の基本状態を定める。詳細はLAMMPSのサイトを参照
+
+variable atmos        equal 1.01325                    # Atomic Mass
+
+units       metal 
+atom_style  atomic
+#xyz方向すべて周期的境界条件にしている。x方向のみ真空領域を作り非周期性を出している
+boundary p p p
+
+#計算量に問題がないのなら0.001[ps]にするのが望ましい。
+#timestep 0.01
+timestep    0.001
+#timestep    0.01
+#timestep 0.1
+read_data   ./Fe.lat
+
+#ポテンシャルファイルからポテンシャルを与えている。
+pair_style  eam/alloy
+pair_coeff  * * ./FeCuNi.eam.alloy Fe Fe Fe Fe Fe Fe Fe Fe Fe
+#pair_coeff  * * ./new_potential/FeCuNi.eam.alloy Fe Fe Fe Fe Cu
+#mass        *4 ${mass}
+#mass        5 58.454 correct value!!!
+
+#原子グループに名前を与えている。
+group source type 2
+group detector type 3
+group edge type 6
+group edge_buf type 7
+group buffer type 7 8 9
+#group longage type 9
+
+#欲しい情報に記号を割り当てファイル出力させている。
+variable s equal xcm(source,x)
+variable d equal xcm(detector,x)
+variable g equal xcm(edge,x)
+variable t equal temp
+variable p equal press
+variable v equal vol
+variable e equal etotal
+variable i equal time
+variable FIG string iranai
+variable f equal fcm(detector,x)
+variable l equal vcm(detector,x)
+
+##############################################
+variable rescaleSteps equal 0
+variable relaxationSteps equal 0
+variable initialSteps equal ${rescaleSteps}+${relaxationSteps}
+##############################################
+
+
+thermo 1
+#thermo_style custom time v_sox v_dex temp vol etotal v_FIG
+
+fix extra all print 1 "$i $s $d $g $l $f $t $v $e $p" file outp_1.txt
+
+minimize 1.0e-18 1.0e-18 100000 100000
+#fix npt1 all npt temp ${npt_temp} ${npt_temp} 1 iso ${atmos} ${atmos} 1
+#velocity all create ${npt_temp} 12345 dist gaussian
+#velocity all create ${npt_temp} ${rand} dist gaussian
+#fix rescale all temp/rescale 1 50 50 1.0 1.0
+#run ${rescaleSteps}
+#unfix rescale
+#run ${relaxationSteps}
+#minimize 1.0e-18 1.0e-18 100000 100000
+
+
+#nveで系を設定し粒子をminimizeで沈静化させている。minimizeが甘いと超音波信号が不規則に揺れることがある。
+fix 1 all nve
+#fix 1 all nvt temp 0.1 0.1 1
+#Set the last (right end) number to timestep*100. I dont know why but LAMMPS guide told me so.
+#
+#
+#minimize 1.0e-18 1.0e-18 100000 100000
+#
+#delete_atoms group longage
+
+#スナップショットが欲しかったらここのインデントを解除する
+###dump 0 all cfg 10 all.*.cfg mass type xs ys zs id
+###dump_modify 0 element Fe Fe Fe Fe
+#dump_modify 0 element Fe Fe Fe Fe Cu
+
+
+#系の右恥の原子を固定する
+#fix 9 edge recenter INIT INIT INIT
+#系の右端をばっふぁにする
+#fix 9 edge viscos command
+
+############################################################
+variable current_time equal time
+#variable A equal 0.1
+#variable T equal 2.0
+#variable A equal 10.0
+#variable B equal -1*$A
+#variable T equal 200.0
+
+##振幅、周期を定める。
+variable A equal 0.1
+variable B equal -1*$A
+variable T1 equal 2
+variable T2 equal 100/7 
+variable Q equal 4*${T2}
+# Q is temporary symbol of 3.5 times T.
+#timestep unit is ps. f = 1000 / T GHz.
+variable omega1 equal 2.0*PI/${T1}
+variable omega2 equal 2.0*PI/${T2}
+#variable freq equal 1/$T
+
+#variable m equal 55.845
+#variable n equal 800
+#variable F equal 96500
+
+#variable z equal 1000
+#variable y equal 0.01
+#variable c equal 2.0*PI/$T*$z*$y
+#variable myx0 atom x
+#variable myx atom ${myx0} + $A*sin(${omega}*time)
+variable myx equal $A*sin(${omega1}*time)+$A*sin(${omega2}*time)
+variable myv equal $A*cos(${omega1}*time)+$A*cos(${omega2}*time)  
+
+#the extra output file below should be processed by using OVITO
+###正弦波を導入する。同位相なら$A,逆位相なら$B
+fix 2 source move variable v_myx NULL NULL v_myv NULL NULL
+##force setting
+#variable frc equal $m*10/$F*v_omega*v_omega*swiggle(0.0,$A,$T)
+#fix 2 source setforce v_frc NULL NULL
+###velocity adjust
+#variable vrc equal -1*v_omega*$A
+#velocity source set v_vrc NULL NULL
+
+#unfix 2
+#variable w equal (1987.305504+1988.733166)/2-2.855324
+#variable w equal (2535.527712+2536.955374)/2-2.855324
+
+#variable w equal 1985.877842
+#edgeの初期位置を代入する。
+#variable w equal 2003.009786
+##########variable w equal 1987.305504
+
+#loop
+label run_varts
+run 100
+#velocity buffer set 0.0 0.0 0.0
+#displace_atoms buffer move 0.0 0.0 0.0
+##########variable j equal xcm(edge_buf,x)
+###########variable z equal $j
+# variabel g equal xcm(edge,x)
+#
+### バッファ層の原子を一度消去し、add.latからデータを読み取りもう一度原子を導入する。
+#delete_atoms group buffer
+#read_data   ./Fe.lat
+#read_data   ./add.lat add merge 6 group buffer
+#read_data   ./add.lat add append
+#6の意味がわからな
+#read_data   ./add.lat add append 6 group buffer
+
+#group edge_buf type 7
+#group buffer type 7 8 9
+
+#print('$j')
+#print('$z')
+##########print $j
+##########print $z
+####edgeの原子層の重心位置に対して変位が生じないように原子位置を移動させる。gがedgeの重心位置を表す。
+#print $g
+#print $w
+#variable g equal xcm(edge,x)
+#variable q equal $g-$w
+#variable q equal $z-$w
+####################1134.27745900039
+#displace_atoms buffer move v_q 0.0 0.0
+
+#3.5周期分の波を導入している。導入する波の周波数に合わせて変更する必要がある。
+if "${current_time}<$Q" then "jump SELF run_varts" &
+else "jump SELF loopBreak"
+
+label loopBreak
+unfix 2
+variable last equal floor(${T2}/dt)
+
+run ${last}
+
+#cscの説明に書いてあることだが、コノのプログラムはSLURMのバッチファイルによって動かす。
+#計算規模によって dev.sh S_M.sh large.sh をうまく使い分けること
+#うまく行けば slurm... というファイル、log.lammps、outp.txt が生成される。
+################################################## 

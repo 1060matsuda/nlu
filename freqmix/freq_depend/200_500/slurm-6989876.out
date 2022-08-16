@@ -1,0 +1,51 @@
+LAMMPS (14 Dec 2021)
+Reading data file ...
+  orthogonal box = (0 0 0) to (5427.9709 57.10648 57.10648)
+  64 by 1 by 1 MPI processor grid
+  reading atoms ...
+  720800 atoms
+  read_data CPU = 1.749 seconds
+800 atoms in group d1
+800 atoms in group d2
+800 atoms in group d3
+800 atoms in group d4
+800 atoms in group d5
+800 atoms in group d6
+800 atoms in group d7
+800 atoms in group d8
+800 atoms in group d9
+800 atoms in group d10
+800 atoms in group d11
+800 atoms in group d12
+800 atoms in group d13
+800 atoms in group d14
+800 atoms in group d15
+800 atoms in group d16
+800 atoms in group d17
+800 atoms in group d18
+800 atoms in group d19
+800 atoms in group d20
+800 atoms in group d21
+800 atoms in group d22
+800 atoms in group d23
+800 atoms in group d24
+800 atoms in group d25
+800 atoms in group d26
+800 atoms in group d27
+800 atoms in group d28
+800 atoms in group d29
+800 atoms in group d30
+800 atoms in group d31
+ERROR: Too many groups (../group.cpp:159)
+Last command: group d32 type 32
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[42416,1],18]
+  Exit code:    1
+--------------------------------------------------------------------------

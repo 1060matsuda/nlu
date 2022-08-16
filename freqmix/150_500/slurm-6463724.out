@@ -1,0 +1,23 @@
+LAMMPS (29 Sep 2021 - Update 1)
+KOKKOS mode is enabled (../kokkos.cpp:97)
+  will use up to 4 GPU(s) per node
+  using 1 OpenMP thread(s) per MPI task
+Reading data file ...
+  orthogonal box = (0.0000000 0.0000000 0.0000000) to (4143.0751 57.106480 57.106480)
+  128 by 1 by 1 MPI processor grid
+  reading atoms ...
+  360800 atoms
+  read_data CPU = 14.093 seconds
+ERROR: Incorrect args for pair coefficients (../pair_eam_alloy_kokkos.cpp:936)
+Last command: pair_coeff  * * ./FeCuNi.eam.alloy Fe Fe Fe Fe Fe
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[46739,1],72]
+  Exit code:    1
+--------------------------------------------------------------------------

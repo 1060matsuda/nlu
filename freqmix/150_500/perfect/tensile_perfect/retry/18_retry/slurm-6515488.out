@@ -1,0 +1,149 @@
+LAMMPS (29 Sep 2021 - Update 1)
+KOKKOS mode is enabled (../kokkos.cpp:97)
+  will use up to 2 GPU(s) per node
+  using 1 OpenMP thread(s) per MPI task
+Reading data file ...
+  orthogonal box = (0.0000000 0.0000000 0.0000000) to (4143.0751 57.106480 57.106480)
+  64 by 1 by 1 MPI processor grid
+  reading atoms ...
+  360800 atoms
+  read_data CPU = 4.605 seconds
+WARNING: Using 'neigh_modify every 1 delay 0 check yes' setting during minimization (../min.cpp:188)
+Neighbor list info ...
+  update every 1 steps, delay 0 steps, check yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 7.6
+  ghost atom cutoff = 7.6
+  binsize = 7.6, bins = 546 8 8
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair eam/alloy/kk, perpetual
+      attributes: full, newton off, kokkos_device
+      pair build: full/bin/kk/device
+      stencil: full/bin/3d
+      bin: kk/device
+Setting up cg/kk style minimization ...
+  Unit style    : metal
+  Current step  : 0
+WARNING: Energy due to 1 extra global DOFs will be included in minimizer energies
+WARNING: Fixes cannot yet send exchange data in Kokkos communication, switching to classic exchange/border communication (../comm_kokkos.cpp:581)
+Per MPI rank memory allocation (min/avg/max) = 2.376 | 4.616 | 9.668 Mbytes
+Step Temp E_pair E_mol TotEng Press Volume 
+       0            0   -1486645.8            0   -1486645.8   -52.715618     13511190 
+       5            0   -1428997.9            0   -1428997.9   -4241.4933     13510011 
+ERROR on proc 29: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 30: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 31: Substitution for illegal variable peratomxt (../input.cpp:617)
+Loop time of 1.34978 on 64 procs for 5 steps with 360800 atoms
+
+87.4% CPU use with 64 MPI tasks x 1 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = linesearch alpha is zero
+  Energy initial, next-to-last, final = 
+     -1486645.77951318   -1486647.6284912  -1428997.94095791
+  Force two-norm initial, final = 1333.6748 107299.61
+  Force max component initial, final = 1333.6559 107299.58
+  Final line search alpha, max atom move = 3.2660501e-13 3.5044579e-08
+  Iterations, force evaluations = 5 52
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0.16395    | 0.287      | 0.52675    |  26.2 | 21.26
+Neigh   | 0.011164   | 0.015582   | 0.029343   |   2.6 |  1.15
+Comm    | 0.002635   | 0.097634   | 0.30003    |  41.8 |  7.23
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 0.9496     |            |       | 70.35
+
+Nlocal:        5637.50 ave       18400 max           0 min
+Histogram: 44 0 0 0 0 0 0 0 1 19
+Nghost:        5643.81 ave       18428 max           0 min
+Histogram: 43 1 0 0 0 0 0 1 1 18
+Neighs:         0.00000 ave           0 max           0 min
+Histogram: 64 0 0 0 0 0 0 0 0 0
+FullNghs:      775772.0 ave  3.0912e+06 max           0 min
+Histogram: 44 0 0 0 0 0 10 0 1 9
+
+Total # of neighbors = 49649400
+Ave neighs/atom = 137.60920
+Neighbor list builds = 2
+Dangerous builds = 0
+Initial Length, L0: 4142.95461920741
+119200 atoms in group dcr
+800 atoms in group source
+800 atoms in group detector
+400 atoms in group edge
+400 atoms in group edge_buf
+120000 atoms in group buffer
+ERROR on proc 0: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 1: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 2: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 3: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 4: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 5: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 6: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 7: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 8: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 9: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 10: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 11: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 12: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 13: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 14: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 15: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 16: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 17: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 18: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 19: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 20: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 21: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 22: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 23: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 24: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 25: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 26: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 27: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 28: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 57: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 58: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 59: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 60: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 61: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 62: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 63: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 32: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 33: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 34: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 35: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 36: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 37: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 38: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 39: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 40: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 41: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 42: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 43: Substitution for illegal variable peratomxt (../input.cpp:617)
+--------------------------------------------------------------------------
+MPI_ABORT was invoked on rank 29 in communicator MPI_COMM_WORLD
+with errorcode 1.
+
+NOTE: invoking MPI_ABORT causes Open MPI to kill all MPI processes.
+You may or may not see output from other processes, depending on
+exactly when Open MPI kills them.
+--------------------------------------------------------------------------
+ERROR on proc 44: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 45: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 46: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 47: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 48: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 49: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 50: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 51: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 52: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 53: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 54: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 55: Substitution for illegal variable peratomxt (../input.cpp:617)
+ERROR on proc 56: Substitution for illegal variable peratomxt (../input.cpp:617)
+[r233n13:01847] 63 more processes have sent help message help-mpi-api.txt / mpi-abort
+[r233n13:01847] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages

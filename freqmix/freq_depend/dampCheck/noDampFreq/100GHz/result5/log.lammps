@@ -1,0 +1,446 @@
+LAMMPS (14 Dec 2021)
+#################################
+#two psrts have to be corrected
+#Vacancy >> type : Fe Fe Fe Fe Fe Fe Fe Fe Fe
+#Cu      >> type : Fe Fe Fe Fe Fe Fe Fe Fe Fe Cu
+#################################
+
+####
+#variable nvt_temp      equal 0.1                     # Temperature
+variable npt_temp      equal 0.1
+####
+#系の基本状態を定める。詳細はLAMMPSのサイトを参照
+
+variable atmos        equal 1.01325                    # Atomic Mass
+
+units       metal
+atom_style  atomic
+#xyz方向すべて周期的境界条件にしている。x方向のみ真空領域を作り非周期性を出している
+boundary p p p
+
+#計算量に問題がないのなら0.001[ps]にするのが望ましい。
+#timestep 0.01
+timestep    0.001
+#timestep    0.01
+#timestep 0.1
+read_data   ./Fe.lat
+Reading data file ...
+  orthogonal box = (-1427.662 0 0) to (3426.3888 57.10648 57.10648)
+  128 by 1 by 1 MPI processor grid
+  reading atoms ...
+  560000 atoms
+  read_data CPU = 1.203 seconds
+
+#ポテンシャルファイルからポテンシャルを与えている。
+pair_style  eam/alloy
+pair_coeff  * * ./FeCuNi.eam.alloy Fe Fe Fe Fe Fe Fe Fe Fe Fe Fe Fe Fe Fe Fe Fe Fe Fe Fe Fe Fe Fe Fe Fe Fe Fe Fe Fe Fe Fe Fe Fe Fe Fe
+#pair_coeff  * * ./new_potential/FeCuNi.eam.alloy Fe Fe Fe Fe Cu
+#mass        *4 ${mass}
+#mass        5 58.454 correct value!!!
+
+#原子グループに名前を与えている。
+group d1 type 1
+800 atoms in group d1
+group d2 type 2
+800 atoms in group d2
+group d3 type 3
+800 atoms in group d3
+group d4 type 4
+800 atoms in group d4
+group d5 type 5
+800 atoms in group d5
+group d6 type 6
+800 atoms in group d6
+group d7 type 7
+800 atoms in group d7
+group d8 type 8
+800 atoms in group d8
+group d9 type 9
+800 atoms in group d9
+group d10 type 10
+800 atoms in group d10
+group d11 type 11
+800 atoms in group d11
+group d12 type 12
+800 atoms in group d12
+group d13 type 13
+800 atoms in group d13
+group d14 type 14
+800 atoms in group d14
+group d15 type 15
+800 atoms in group d15
+group d16 type 16
+800 atoms in group d16
+group d17 type 17
+800 atoms in group d17
+group d18 type 18
+800 atoms in group d18
+group d19 type 19
+800 atoms in group d19
+group d20 type 20
+800 atoms in group d20
+group d21 type 21
+800 atoms in group d21
+group d22 type 22
+800 atoms in group d22
+group d23 type 23
+800 atoms in group d23
+group d24 type 24
+800 atoms in group d24
+group d25 type 25
+800 atoms in group d25
+group d26 type 26
+800 atoms in group d26
+group d27 type 27
+800 atoms in group d27
+group d28 type 28
+800 atoms in group d28
+group d29 type 29
+800 atoms in group d29
+group d30 type 30
+800 atoms in group d30
+group d31 type 31
+800 atoms in group d31
+#group d32 type 32
+##lammps groups shoud be Ngroups<32 (max 31)
+#group source type 2
+#group detector type 3
+#group edge type 6
+#group edge_buf type 7
+#group buffer type 7 8 9
+#group longage type 9
+
+#欲しい情報に記号を割り当てファイル出力させている。
+variable u1 equal xcm(d1,x)
+variable u2 equal xcm(d2,x)
+variable u3 equal xcm(d3,x)
+variable u4 equal xcm(d4,x)
+variable u5 equal xcm(d5,x)
+variable u6 equal xcm(d6,x)
+variable u7 equal xcm(d7,x)
+variable u8 equal xcm(d8,x)
+variable u9 equal xcm(d9,x)
+variable u10 equal xcm(d10,x)
+variable u11 equal xcm(d11,x)
+variable u12 equal xcm(d12,x)
+variable u13 equal xcm(d13,x)
+variable u14 equal xcm(d14,x)
+variable u15 equal xcm(d15,x)
+variable u16 equal xcm(d16,x)
+variable u17 equal xcm(d17,x)
+variable u18 equal xcm(d18,x)
+variable u19 equal xcm(d19,x)
+variable u20 equal xcm(d20,x)
+variable u21 equal xcm(d21,x)
+variable u22 equal xcm(d22,x)
+variable u23 equal xcm(d23,x)
+variable u24 equal xcm(d24,x)
+variable u25 equal xcm(d25,x)
+variable u26 equal xcm(d26,x)
+variable u27 equal xcm(d27,x)
+variable u28 equal xcm(d28,x)
+variable u29 equal xcm(d29,x)
+variable u30 equal xcm(d30,x)
+variable u31 equal xcm(d31,x)
+#variable u32 equal xcm(d32,x)
+
+#variable s equal xcm(source,x)
+#variable d equal xcm(detector,x)
+#variable g equal xcm(edge,x)
+#variable t equal temp
+#variable p equal press
+#variable v equal vol
+#variable e equal etotal
+variable i equal time
+#variable FIG string iranai
+#variable f equal fcm(detector,x)
+#variable l equal vcm(detector,x)
+
+##############################################
+variable rescaleSteps equal 0
+variable relaxationSteps equal 0
+variable initialSteps equal ${rescaleSteps}+${relaxationSteps}
+variable initialSteps equal 0+${relaxationSteps}
+variable initialSteps equal 0+0
+##############################################
+
+
+thermo 1
+#thermo_style custom time v_sox v_dex temp vol etotal v_FIG
+
+fix extra all print 1 "$i ${u1} ${u2} ${u3} ${u4} ${u5} ${u6} ${u7} ${u8} ${u9} ${u10} ${u11} ${u12} ${u13} ${u14} ${u15} ${u16} ${u17} ${u18} ${u19} ${u20} ${u21} ${u22} ${u23} ${u24} ${u25} ${u26} ${u27} ${u28} ${u29} ${u30} ${u31}" file outp_1.txt
+
+#minimize 1.0e-18 1.0e-18 100000 100000
+#fix npt1 all npt temp ${npt_temp} ${npt_temp} 1 iso ${atmos} ${atmos} 1
+#velocity all create ${npt_temp} 12345 dist gaussian
+#velocity all create ${npt_temp} ${rand} dist gaussian
+#fix rescale all temp/rescale 1 50 50 1.0 1.0
+##run ${rescaleSteps}
+#unfix rescale
+#run ${relaxationSteps}
+#minimize 1.0e-18 1.0e-18 100000 100000
+
+minimize 1.0e-30 1.0e-30 10000 10000
+WARNING: Using 'neigh_modify every 1 delay 0 check yes' setting during minimization (../min.cpp:187)
+Neighbor list info ...
+  update every 1 steps, delay 0 steps, check yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 7.6
+  ghost atom cutoff = 7.6
+  binsize = 3.8, bins = 1278 16 16
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair eam/alloy, perpetual
+      attributes: half, newton on
+      pair build: half/bin/atomonly/newton
+      stencil: half/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 4.335 | 7.412 | 12.04 Mbytes
+Step Temp E_pair E_mol TotEng Press 
+       0            0   -2307834.9            0   -2307834.9   -44.824937 
+       1            0   -2307836.8            0   -2307836.8   -52.573597 
+       2            0   -2307836.8            0   -2307836.8   -54.255446 
+       3            0   -2307836.9            0   -2307836.9   -53.623759 
+       4            0   -2307836.9            0   -2307836.9   -53.990743 
+       5            0   -2307836.9            0   -2307836.9   -54.515322 
+       6            0   -2307836.9            0   -2307836.9   -54.700494 
+       7            0   -2307836.9            0   -2307836.9     -54.7905 
+       8            0   -2307836.9            0   -2307836.9    -54.86502 
+       9            0   -2307836.9            0   -2307836.9   -54.960083 
+      10            0   -2307836.9            0   -2307836.9   -55.013823 
+      11            0   -2307836.9            0   -2307836.9   -55.050933 
+      12            0   -2307836.9            0   -2307836.9   -55.083959 
+      13            0   -2307836.9            0   -2307836.9   -55.121759 
+      14            0   -2307836.9            0   -2307836.9   -55.148058 
+      15            0   -2307836.9            0   -2307836.9   -55.167427 
+      16            0   -2307836.9            0   -2307836.9   -55.186296 
+      17            0   -2307836.9            0   -2307836.9   -55.206463 
+      18            0   -2307836.9            0   -2307836.9   -55.221848 
+      19            0   -2307836.9            0   -2307836.9   -55.233957 
+      20            0   -2307836.9            0   -2307836.9   -55.246158 
+      21            0   -2307836.9            0   -2307836.9   -55.258692 
+      22            0   -2307836.9            0   -2307836.9   -55.268812 
+      23            0   -2307836.9            0   -2307836.9    -55.27688 
+      24            0   -2307836.9            0   -2307836.9   -55.283741 
+      25            0   -2307836.9            0   -2307836.9   -55.290595 
+      26            0   -2307836.9            0   -2307836.9   -55.297898 
+      27            0   -2307836.9            0   -2307836.9   -55.304545 
+      28            0   -2307836.9            0   -2307836.9   -55.309684 
+      29            0   -2307836.9            0   -2307836.9   -55.314471 
+      30            0   -2307836.9            0   -2307836.9   -55.320207 
+      31            0   -2307836.9            0   -2307836.9   -55.325449 
+      32            0   -2307836.9            0   -2307836.9   -55.329539 
+      33            0   -2307836.9            0   -2307836.9   -55.333082 
+      34            0   -2307836.9            0   -2307836.9   -55.337738 
+      35            0   -2307836.9            0   -2307836.9   -55.341952 
+      36            0   -2307836.9            0   -2307836.9   -55.345232 
+      37            0   -2307836.9            0   -2307836.9   -55.348445 
+      38            0   -2307836.9            0   -2307836.9   -55.351958 
+      39            0   -2307836.9            0   -2307836.9   -55.355329 
+      40            0   -2307836.9            0   -2307836.9   -55.358153 
+      41            0   -2307836.9            0   -2307836.9   -55.361224 
+      42            0   -2307836.9            0   -2307836.9   -55.363951 
+      43            0   -2307836.9            0   -2307836.9   -55.366461 
+      44            0   -2307836.9            0   -2307836.9   -55.369225 
+      45            0   -2307836.9            0   -2307836.9   -55.371892 
+      46            0   -2307836.9            0   -2307836.9   -55.374104 
+      47            0   -2307836.9            0   -2307836.9    -55.37619 
+      48            0   -2307836.9            0   -2307836.9   -55.378694 
+      49            0   -2307836.9            0   -2307836.9   -55.380913 
+      50            0   -2307836.9            0   -2307836.9   -55.382866 
+      51            0   -2307836.9            0   -2307836.9   -55.384921 
+      52            0   -2307836.9            0   -2307836.9    -55.38687 
+      53            0   -2307836.9            0   -2307836.9   -55.388742 
+      54            0   -2307836.9            0   -2307836.9   -55.390675 
+      55            0   -2307836.9            0   -2307836.9   -55.392539 
+      56            0   -2307836.9            0   -2307836.9   -55.394096 
+      57            0   -2307836.9            0   -2307836.9   -55.395762 
+      58            0   -2307836.9            0   -2307836.9   -55.397588 
+      59            0   -2307836.9            0   -2307836.9   -55.399123 
+      60            0   -2307836.9            0   -2307836.9   -55.400656 
+      61            0   -2307836.9            0   -2307836.9   -55.402179 
+      62            0   -2307836.9            0   -2307836.9   -55.403626 
+      63            0   -2307836.9            0   -2307836.9   -55.405093 
+      64            0   -2307836.9            0   -2307836.9   -55.406591 
+      65            0   -2307836.9            0   -2307836.9   -55.407924 
+      66            0   -2307836.9            0   -2307836.9   -55.409167 
+      67            0   -2307836.9            0   -2307836.9   -55.410599 
+      68            0   -2307836.9            0   -2307836.9   -55.411922 
+      69            0   -2307836.9            0   -2307836.9   -55.413139 
+      70            0   -2307836.9            0   -2307836.9   -55.414407 
+      71            0   -2307836.9            0   -2307836.9   -55.415594 
+      72            0   -2307836.9            0   -2307836.9   -55.416781 
+      73            0   -2307836.9            0   -2307836.9   -55.418019 
+      74            0   -2307836.9            0   -2307836.9   -55.419175 
+      75            0   -2307836.9            0   -2307836.9   -55.420217 
+      76            0   -2307836.9            0   -2307836.9   -55.421346 
+      77            0   -2307836.9            0   -2307836.9   -55.422503 
+      78            0   -2307836.9            0   -2307836.9   -55.423531 
+      79            0   -2307836.9            0   -2307836.9   -55.424608 
+      80            0   -2307836.9            0   -2307836.9   -55.425624 
+      81            0   -2307836.9            0   -2307836.9   -55.426599 
+      82            0   -2307836.9            0   -2307836.9   -55.427664 
+      83            0   -2307836.9            0   -2307836.9   -55.428683 
+      84            0   -2307836.9            0   -2307836.9   -55.429608 
+      85            0   -2307836.9            0   -2307836.9   -55.430543 
+      86            0   -2307836.9            0   -2307836.9   -55.431531 
+      87            0   -2307836.9            0   -2307836.9   -55.432449 
+      88            0   -2307836.9            0   -2307836.9   -55.433382 
+      89            0   -2307836.9            0   -2307836.9   -55.434298 
+      90            0   -2307836.9            0   -2307836.9   -55.435133 
+      91            0   -2307836.9            0   -2307836.9   -55.436048 
+      92            0   -2307836.9            0   -2307836.9   -55.436952 
+      93            0   -2307836.9            0   -2307836.9   -55.437785 
+      94            0   -2307836.9            0   -2307836.9   -55.438634 
+      95            0   -2307836.9            0   -2307836.9    -55.43948 
+      96            0   -2307836.9            0   -2307836.9   -55.440304 
+      97            0   -2307836.9            0   -2307836.9   -55.441144 
+      98            0   -2307836.9            0   -2307836.9   -55.441978 
+      99            0   -2307836.9            0   -2307836.9   -55.442739 
+     100            0   -2307836.9            0   -2307836.9   -55.442739 
+Loop time of 6.6718 on 128 procs for 100 steps with 560000 atoms
+
+99.8% CPU use with 128 MPI tasks x no OpenMP threads
+
+Minimization stats:
+  Stopping criterion = linesearch alpha is zero
+  Energy initial, next-to-last, final = 
+     -2307834.85158502  -2307836.89755661  -2307836.89755661
+  Force two-norm initial, final = 7.1080974 0.00030265429
+  Force max component initial, final = 0.19826945 3.3627527e-06
+  Final line search alpha, max atom move = 0.125 4.2034409e-07
+  Iterations, force evaluations = 100 205
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 8.7944e-05 | 2.5028     | 6.41       | 186.3 | 37.51
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 5.7712e-05 | 0.10788    | 2.6935     | 101.6 |  1.62
+Output  | 0.010075   | 0.010273   | 0.011091   |   0.2 |  0.15
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 4.051      |            |       | 60.72
+
+Nlocal:           4375 ave       10800 max           0 min
+Histogram: 74 0 0 2 0 0 0 0 0 52
+Nghost:        5610.99 ave       14319 max           0 min
+Histogram: 74 0 0 1 1 0 0 0 0 52
+Neighs:         366969 ave      909275 max           0 min
+Histogram: 74 0 1 1 0 0 0 0 0 52
+
+Total # of neighbors = 46972000
+Ave neighs/atom = 83.878571
+Neighbor list builds = 0
+Dangerous builds = 0
+
+fix mm1 all box/relax aniso 0.0 couple yz vmax 0.01
+minimize 1.0e-30 1.0e-30 10000 10000
+WARNING: Using 'neigh_modify every 1 delay 0 check yes' setting during minimization (../min.cpp:187)
+Per MPI rank memory allocation (min/avg/max) = 4.335 | 7.421 | 12.04 Mbytes
+Step Temp E_pair E_mol TotEng Press Volume 
+     100            0   -2307836.9            0   -2307836.9   -55.442739     15829788 
+     101            0   -2307836.9            0   -2307836.9    21.115086     15828132 
+     102            0     -2307837            0     -2307837   0.74589924     15828573 
+     103            0     -2307837            0     -2307837  -0.63834279     15828603 
+     104            0     -2307837            0     -2307837  0.016621286     15828588 
+     105            0     -2307837            0     -2307837 -0.0067071758     15828589 
+     106            0     -2307837            0     -2307837 -0.0013495743     15828589 
+     107            0     -2307837            0     -2307837 -0.0013495743     15828589 
+Loop time of 2.1414 on 128 procs for 7 steps with 560000 atoms
+
+100.0% CPU use with 128 MPI tasks x no OpenMP threads
+
+Minimization stats:
+  Stopping criterion = linesearch alpha is zero
+  Energy initial, next-to-last, final = 
+     -2307836.89755661  -2307836.97561311  -2307836.97561311
+  Force two-norm initial, final = 1165.5554 0.026170337
+  Force max component initial, final = 824.16463 0.015726094
+  Final line search alpha, max atom move = 9.7028475e-06 1.5258789e-07
+  Iterations, force evaluations = 7 45
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 1.8933e-05 | 0.58736    | 1.4198     |  89.7 | 27.43
+Neigh   | 0.00011278 | 0.25788    | 0.64711    |  60.4 | 12.04
+Comm    | 0.00025255 | 0.025591   | 0.62283    |  47.7 |  1.20
+Output  | 0.00051754 | 0.00053076 | 0.00055429 |   0.0 |  0.02
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 1.27       |            |       | 59.31
+
+Nlocal:           4375 ave       10800 max           0 min
+Histogram: 74 0 0 2 0 0 0 0 0 52
+Nghost:        5610.99 ave       14319 max           0 min
+Histogram: 74 0 0 1 1 0 0 0 0 52
+Neighs:         366969 ave      908414 max           0 min
+Histogram: 74 0 1 1 0 0 0 0 0 52
+
+Total # of neighbors = 46972000
+Ave neighs/atom = 83.878571
+Neighbor list builds = 22
+Dangerous builds = 21
+unfix mm1
+#write_data ./afterboxrelax.cuppt.lat
+fix mm2 all nve
+minimize 1.0e-30 1.0e-30 10000 10000
+WARNING: Using 'neigh_modify every 1 delay 0 check yes' setting during minimization (../min.cpp:187)
+Per MPI rank memory allocation (min/avg/max) = 4.335 | 7.422 | 12.04 Mbytes
+Step Temp E_pair E_mol TotEng Press 
+     107            0     -2307837            0     -2307837 -0.0013495743 
+     108            0     -2307837            0     -2307837 -0.019517209 
+     109            0     -2307837            0     -2307837 -0.025965454 
+     110            0     -2307837            0     -2307837 -0.028784006 
+     111            0     -2307837            0     -2307837 -0.030275611 
+     112            0     -2307837            0     -2307837 -0.031168029 
+     113            0     -2307837            0     -2307837 -0.031922615 
+     114            0     -2307837            0     -2307837 -0.032467719 
+     115            0     -2307837            0     -2307837 -0.032813773 
+     116            0     -2307837            0     -2307837 -0.033095708 
+     117            0     -2307837            0     -2307837 -0.033323835 
+     118            0     -2307837            0     -2307837 -0.033467082 
+     119            0     -2307837            0     -2307837 -0.033555983 
+     120            0     -2307837            0     -2307837 -0.033588289 
+     121            0     -2307837            0     -2307837 -0.033548482 
+     122            0     -2307837            0     -2307837 -0.033437521 
+     123            0     -2307837            0     -2307837 -0.033241463 
+     124            0     -2307837            0     -2307837 -0.032982121 
+     125            0     -2307837            0     -2307837 -0.032658068 
+Loop time of 1.26244 on 128 procs for 18 steps with 560000 atoms
+
+99.6% CPU use with 128 MPI tasks x no OpenMP threads
+
+Minimization stats:
+  Stopping criterion = energy tolerance
+  Energy initial, next-to-last, final = 
+     -2307836.97561311  -2307836.97562046  -2307836.97562046
+  Force two-norm initial, final = 0.011957231 0.00021482945
+  Force max component initial, final = 0.00031979349 3.2972442e-06
+  Final line search alpha, max atom move = 1 3.2972442e-06
+  Iterations, force evaluations = 18 36
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 1.5502e-05 | 0.46437    | 1.1661     |  80.3 | 36.78
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 1.0695e-05 | 0.020983   | 0.50739    |  42.8 |  1.66
+Output  | 0.0017726  | 0.0018071  | 0.0019869  |   0.1 |  0.14
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 0.7753     |            |       | 61.41
+
+Nlocal:           4375 ave       10800 max           0 min
+Histogram: 74 0 0 2 0 0 0 0 0 52
+Nghost:        5610.99 ave       14319 max           0 min
+Histogram: 74 0 0 1 1 0 0 0 0 52
+Neighs:         366969 ave      908414 max           0 min
+Histogram: 74 0 1 1 0 0 0 0 0 52
+
+Total # of neighbors = 46972000
+Ave neighs/atom = 83.878571
+Neighbor list builds = 0
+Dangerous builds = 0
+unfix mm2
+
+fix koteitan d31 freeze
+ERROR: Unrecognized fix style 'freeze' is part of the GRANULAR package which is not enabled in this LAMMPS binary. (../modify.cpp:906)
+Last command: fix koteitan d31 freeze

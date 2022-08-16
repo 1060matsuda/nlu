@@ -1,0 +1,185 @@
+LAMMPS (29 Sep 2021 - Update 1)
+KOKKOS mode is enabled (../kokkos.cpp:97)
+  will use up to 2 GPU(s) per node
+  using 1 OpenMP thread(s) per MPI task
+package kokkos
+# ------------------------ INITIALIZATION ----------------------------
+units 		metal
+dimension	3
+boundary	p	p	p
+atom_style	atomic
+variable latparam equal 2.9
+
+# ----------------------- ATOM DEFINITION ----------------------------
+lattice		bcc ${latparam}
+lattice		bcc 2.9
+Lattice spacing in x,y,z = 2.9000000 2.9000000 2.9000000
+region		whole block 0 10 0 10 0 10
+create_box	1 whole
+Created orthogonal box = (0.0000000 0.0000000 0.0000000) to (29.000000 29.000000 29.000000)
+  4 by 4 by 4 MPI processor grid
+lattice 	bcc ${latparam} orient x 1 0 0 orient y 0 1 0 orient z 0 0 1
+lattice 	bcc 2.9 orient x 1 0 0 orient y 0 1 0 orient z 0 0 1
+Lattice spacing in x,y,z = 2.9000000 2.9000000 2.9000000
+create_atoms	1 region whole
+Created 2000 atoms
+  using lattice units in orthogonal box = (0.0000000 0.0000000 0.0000000) to (29.000000 29.000000 29.000000)
+  create_atoms CPU = 0.039 seconds
+
+timestep 0.001
+pair_style  eam/alloy
+pair_coeff  * * ./FeCuNi.eam.alloy Fe
+#pair_coeff  * * ./new_potential/FeCuNi.eam.alloy Fe Fe Fe Fe Cu
+#mass        *4 ${mass}
+#pair_style  aenet
+#pair_coeff  * * v03 Fe 10sw-10sw.nn Fe Fe Fe Fe Fe
+#pair_coeff  * * ./new_potential/FeCuNi.eam.alloy Fe Fe Fe Fe Cu
+#mass        *4 ${mass}
+mass        * 55.845
+#mass        5 58.454 correct value!!!
+fix                 relax all box/relax aniso 0.0 couple xy vmax 0.01
+minimize 1.0e-30 1.0e-30 10000 10000
+WARNING: Using 'neigh_modify every 1 delay 0 check yes' setting during minimization (../min.cpp:188)
+Neighbor list info ...
+  update every 1 steps, delay 0 steps, check yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 7.6
+  ghost atom cutoff = 7.6
+  binsize = 7.6, bins = 4 4 4
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair eam/alloy/kk, perpetual
+      attributes: full, newton off, kokkos_device
+      pair build: full/bin/kk/device
+      stencil: full/bin/3d
+      bin: kk/device
+WARNING: Fixes cannot yet send exchange data in Kokkos communication, switching to classic exchange/border communication (../comm_kokkos.cpp:581)
+Per MPI rank memory allocation (min/avg/max) = 1.317 | 1.317 | 1.317 Mbytes
+Step Temp E_pair E_mol TotEng Press Volume 
+       0            0   -8216.6733            0   -8216.6733   -79219.299        24389 
+       5            0   -8244.8702            0   -8244.8702 -9.7944981e-08    23279.115 
+Loop time of 1.32135 on 64 procs for 5 steps with 2000 atoms
+
+76.1% CPU use with 64 MPI tasks x 1 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = energy tolerance
+  Energy initial, next-to-last, final = 
+     -8216.67332790924   -8244.8702014704   -8244.8702014704
+  Force two-norm initial, final = 2088.6961 2.5650946e-09
+  Force max component initial, final = 1205.9093 1.4453856e-09
+  Final line search alpha, max atom move = 1.0000000 1.4453856e-09
+  Iterations, force evaluations = 5 9
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0.40379    | 0.42459    | 0.44324    |   1.4 | 32.13
+Neigh   | 0.011019   | 0.013428   | 0.016513   |   1.2 |  1.02
+Comm    | 0.5184     | 0.5254     | 0.53401    |   0.6 | 39.76
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 0.3579     |            |       | 27.09
+
+Nlocal:        31.2500 ave          35 max          30 min
+Histogram: 48 0 0 0 0 0 0 0 0 16
+Nghost:        992.750 ave         994 max         989 min
+Histogram: 16 0 0 0 0 0 0 0 0 48
+Neighs:         0.00000 ave           0 max           0 min
+Histogram: 64 0 0 0 0 0 0 0 0 0
+FullNghs:      5250.00 ave        5880 max        5040 min
+Histogram: 48 0 0 0 0 0 0 0 0 16
+
+Total # of neighbors = 336000
+Ave neighs/atom = 168.00000
+Neighbor list builds = 1
+Dangerous builds = 0
+
+# ------------------------- SETTINGS ---------------------------------
+
+######################################
+# EQUILIBRATION
+reset_timestep	0
+timestep 0.001
+
+# Set thermo output
+thermo 1000
+thermo_style custom step lx ly lz press pxx pyy pzz pe temp
+write_data aftermm.lat
+System init for write_data ...
+# Run for at least 10 picosecond (assuming 1 fs timestep)
+unfix relax
+
+# Store final cell length for strain calculations
+variable tmp equal "lx"
+variable L0 equal ${tmp}
+variable L0 equal 28.5532461911119
+print "Initial Length, L0: ${L0}"
+Initial Length, L0: 28.5532461911119
+
+######################################
+# DEFORMATION
+reset_timestep	0
+
+fix 1 all nve
+variable srate equal 1.0e10
+variable srate1 equal "v_srate / 1.0e12"
+fix		2 all deform 1 x trate ${srate1} units box remap x
+fix		2 all deform 1 x trate 0.01 units box remap x
+
+# Output strain and stress info to file
+# for units metal, pressure is in [bars] = 100 [kPa] = 1/10000 [GPa]
+# p2, p3, p4 are in GPa
+variable strain equal "ln(lx/v_L0)"
+variable p1 equal "v_strain"
+variable p2 equal "-pxx/10000"
+variable p3 equal "-pyy/10000"
+variable p4 equal "-pzz/10000"
+fix def1 all print 1 "${p1} ${p2} ${p3} ${p4}" file sscurve.txt screen no
+
+# Use cfg for AtomEye
+#dump 		1 all cfg 250 dump.tensile_*.cfg mass type xs ys zs c_csym c_peratom fx fy fz
+#dump_modify 1 element Al
+
+# Display thermo
+thermo 	1000
+thermo_style	custom step v_strain temp v_p2 v_p3 v_p4 ke pe press
+
+run	500
+Per MPI rank memory allocation (min/avg/max) = 1.246 | 1.248 | 1.261 Mbytes
+Step v_strain Temp v_p2 v_p3 v_p4 KinEng PotEng Press 
+       0 2.220446e-16            0 9.7948577e-12 9.7950317e-12 9.7947158e-12            0   -8244.8702 -9.7948684e-08 
+     500        0.005 1.8043183e-20    1.2251452   0.71927823   0.71927823 4.6621967e-21   -8244.4259   -8879.0055 
+Loop time of 42.2614 on 64 procs for 500 steps with 2000 atoms
+
+Performance: 1.022 ns/day, 23.479 hours/ns, 11.831 timesteps/s
+84.9% CPU use with 64 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 18.411     | 21.42      | 23.802     |  27.1 | 50.68
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 8.4205     | 9.5492     | 10.25      |  16.6 | 22.60
+Output  | 0.0058084  | 0.0058099  | 0.0058171  |   0.0 |  0.01
+Modify  | 6.6284     | 9.3924     | 13.399     |  51.5 | 22.22
+Other   |            | 1.894      |            |       |  4.48
+
+Nlocal:        31.2500 ave          54 max          18 min
+Histogram: 5 12 7 16 5 12 2 4 0 1
+Nghost:        992.750 ave        1006 max         970 min
+Histogram: 1 0 4 2 7 10 16 7 12 5
+Neighs:         0.00000 ave           0 max           0 min
+Histogram: 64 0 0 0 0 0 0 0 0 0
+FullNghs:      5250.00 ave        9072 max        3024 min
+Histogram: 5 12 7 16 5 12 2 4 0 1
+
+Total # of neighbors = 336000
+Ave neighs/atom = 168.00000
+Neighbor list builds = 0
+Dangerous builds = 0
+
+######################################
+# SIMULATION DONE
+print "All done"
+All done
+Total wall time: 0:00:54

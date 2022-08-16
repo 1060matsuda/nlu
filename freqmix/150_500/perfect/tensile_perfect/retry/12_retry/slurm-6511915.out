@@ -1,0 +1,107 @@
+LAMMPS (29 Sep 2021 - Update 1)
+KOKKOS mode is enabled (../kokkos.cpp:97)
+  will use up to 2 GPU(s) per node
+  using 1 OpenMP thread(s) per MPI task
+Reading data file ...
+  orthogonal box = (0.0000000 0.0000000 0.0000000) to (436.86457 57.106480 57.106480)
+  16 by 2 by 2 MPI processor grid
+  reading atoms ...
+  120800 atoms
+  read_data CPU = 0.352 seconds
+WARNING: Using 'neigh_modify every 1 delay 0 check yes' setting during minimization (../min.cpp:188)
+Neighbor list info ...
+  update every 1 steps, delay 0 steps, check yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 7.6
+  ghost atom cutoff = 7.6
+  binsize = 7.6, bins = 58 8 8
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair eam/alloy/kk, perpetual
+      attributes: full, newton off, kokkos_device
+      pair build: full/bin/kk/device
+      stencil: full/bin/3d
+      bin: kk/device
+Setting up cg/kk style minimization ...
+  Unit style    : metal
+  Current step  : 0
+WARNING: Fixes cannot yet send exchange data in Kokkos communication, switching to classic exchange/border communication (../comm_kokkos.cpp:581)
+Per MPI rank memory allocation (min/avg/max) = 2.301 | 2.470 | 2.508 Mbytes
+Step Temp E_pair E_mol TotEng Press 
+       0            0   -497261.36            0   -497261.36   -502.20467 
+     132            0    -497263.4            0    -497263.4   -621.23749 
+Loop time of 14.6857 on 64 procs for 132 steps with 120800 atoms
+
+84.0% CPU use with 64 MPI tasks x 1 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = energy tolerance
+  Energy initial, next-to-last, final = 
+     -497261.355337392  -497263.401315488  -497263.401315488
+  Force two-norm initial, final = 7.1080974 1.4066919e-05
+  Force max component initial, final = 0.19826945 1.9078853e-07
+  Final line search alpha, max atom move = 1.0000000 1.9078853e-07
+  Iterations, force evaluations = 132 264
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 8.0547     | 8.6274     | 8.9797     |   7.7 | 58.75
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 3.3823     | 3.5128     | 3.7122     |   3.6 | 23.92
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 2.546      |            |       | 17.33
+
+Nlocal:        1887.50 ave        2000 max        1600 min
+Histogram: 4 0 0 0 0 0 0 56 0 4
+Nghost:        5147.12 ave        5315 max        4353 min
+Histogram: 4 0 0 4 0 0 0 16 4 36
+Neighs:         0.00000 ave           0 max           0 min
+Histogram: 64 0 0 0 0 0 0 0 0 0
+FullNghs:      315025.0 ave      336000 max      252200 min
+Histogram: 4 0 0 0 0 0 4 52 0 4
+
+Total # of neighbors = 20161600
+Ave neighs/atom = 166.90066
+Neighbor list builds = 0
+Dangerous builds = 0
+System init for write_data ...
+Initial Length, L0: 436.864572
+Setting up Verlet run ...
+  Unit style    : metal
+  Current step  : 0
+  Time step     : 0.001
+Per MPI rank memory allocation (min/avg/max) = 1.901 | 2.023 | 2.050 Mbytes
+Step v_strain Temp v_p2 v_p3 v_p4 KinEng PotEng Press 
+       0            0            0 -1.2755503e-08   0.09318563   0.09318563            0    -497263.4   -621.23749 
+     500       0.0005 0.00072564548   0.11226823   0.15994859   0.15994859  0.011330589   -497263.16   -1440.5514 
+Loop time of 32.1708 on 64 procs for 500 steps with 120800 atoms
+
+Performance: 1.343 ns/day, 17.873 hours/ns, 15.542 timesteps/s
+82.9% CPU use with 64 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 14.116     | 16.096     | 18.933     |  35.5 | 50.03
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 6.1612     | 6.9994     | 10.511     |  43.4 | 21.76
+Output  | 0.0046589  | 0.0046621  | 0.0046681  |   0.0 |  0.01
+Modify  | 4.4442     | 7.1901     | 9.5998     |  61.4 | 22.35
+Other   |            | 1.881      |            |       |  5.85
+
+Nlocal:        1887.50 ave        2014 max        1593 min
+Histogram: 4 0 0 0 0 0 3 53 0 4
+Nghost:        5147.12 ave        5330 max        4349 min
+Histogram: 4 0 0 4 0 0 0 16 4 36
+Neighs:         0.00000 ave           0 max           0 min
+Histogram: 64 0 0 0 0 0 0 0 0 0
+FullNghs:      315025.0 ave      338352 max      251101 min
+Histogram: 4 0 0 0 0 4 0 46 6 4
+
+Total # of neighbors = 20161600
+Ave neighs/atom = 166.90066
+Neighbor list builds = 0
+Dangerous builds = 0
+All done
+Total wall time: 0:00:59
