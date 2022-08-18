@@ -180,14 +180,15 @@ variable current_time equal time
 #variable B equal -1*$A
 #variable T equal 200.0
 
-#とりあえず500GHz, 200GHzでやってみる．
 ##振幅、周期を定める。
-variable f1 equal 200
+variable f1 equal 100 #GHz
+variable f2 equal 30
 variable T1 equal 1000/${f1}
-variable T2 equal 5 
-variable A equal ${T1}/20
-variable B equal -1*$A
-variable Q equal 4*${T1}
+variable T2 equal 1000/${f2}
+variable A1 equal ${T1}/20
+variable B1 equal -1*${A1}
+variable A2 equal ${T2}/20
+variable Q equal 6*${T2}
 # Q is temporary symbol of 3.5 times T.
 #timestep unit is ps. f = 1000 / T GHz.
 variable omega1 equal 2.0*PI/${T1}
@@ -205,13 +206,13 @@ variable omega2 equal 2.0*PI/${T2}
 #variable myx atom ${myx0} + $A*sin(${omega}*time)
 
 ###NORMAL MIX SETTING###
-#variable myx equal $A*sin(${omega1}*time)+$A*sin(${omega2}*time)
-#variable myv equal $A*cos(${omega1}*time)+$A*cos(${omega2}*time)  
+variable myx equal ${A1}*sin(${omega1}*time)+${A2}*sin(${omega2}*time)
+variable myv equal ${A1}*cos(${omega1}*time)+${A2}*cos(${omega2}*time)  
 ###
 
 ###500GHz single test###
-variable myx equal $A*sin(${omega1}*time)
-variable myv equal $A*cos(${omega1}*time)  
+#variable myx equal $A*sin(${omega1}*time)
+#variable myv equal $A*cos(${omega1}*time)  
 ###
 
 
