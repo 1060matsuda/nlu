@@ -233,13 +233,13 @@ def getIndexUpToSixthHarmonic(data, fundamental_frequency):
 
 
 def getBetaFreqMix(aSum, aDif, aF1, aF2, freq1, freq2, DeltaX, vel):
-    """Calculates beta with freqmix method."""
+    """Calculates beta with freqmix method. length:m, freq:Hz, time:s"""
     aMix = (aSum+aDif)/2
     Lambda1 = vel/freq1
     Lambda2 = vel/freq2
     K1 = 2*math.pi/Lambda1
     K2 = 2*math.pi/Lambda2
-    return np.array([4*aDif/DeltaX/aF1/aF2/K1/K2, 4*aSum/DeltaX/aF1/aF2/K1/K2, 4*aMix/DeltaX/aF1/aF2/K1/K2])
+    return np.array([4*aSum/DeltaX/aF1/aF2/K1/K2, 4*aDif/DeltaX/aF1/aF2/K1/K2, 4*aMix/DeltaX/aF1/aF2/K1/K2])
 
 
 def wave_arrival_zerocross(u_at_x, dx_wavesource_and_x, v_temp, timestep, T):
@@ -249,11 +249,11 @@ def wave_arrival_zerocross(u_at_x, dx_wavesource_and_x, v_temp, timestep, T):
     temporary velocity (e.g. expt value)[m/s],
     timestep [ps/step], and the wave cycle T [ps].
     """
-    dt_wavesource_and_x = dx_wavesource_and_x*100/v_temp  # ps
-    zerocross_start_timestep = int(dt_wavesource_and_x/timestep)
-    zerocross_timestep = getDownwardZeroCrossIndexFromArbitraryPoint(
-        u_at_x, zerocross_start_timestep)
-    arrival_timestep = int(zerocross_timestep - T/timestep/2)
+    dt_wavesource_and_x = dx_wavesource_and_x*100/v_temp  # ps = A*100/(pm/ps)
+    search_start_timestep = int(dt_wavesource_and_x/timestep+3*T/4/timestep)
+    zerocross_timestep = getUpwardZeroCrossIndexFromArbitraryPoint(
+        u_at_x, search_start_timestep)
+    arrival_timestep = int(zerocross_timestep - T/timestep)
     # v = dx [A] / (arrival_timestep[step]*timestep[ps/step])
     #   = dx/(arrival_timestep*timestep) [A/ps= 10^-10m/10^-12s = 100m/s]
     #   = dx/(arrival_timestep*timestep)*100 [m/s]
