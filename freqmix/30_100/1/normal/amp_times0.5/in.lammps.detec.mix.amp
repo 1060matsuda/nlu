@@ -181,14 +181,16 @@ variable current_time equal time
 #variable T equal 200.0
 
 ##振幅、周期を定める。
+variable amplify_ratio equal 0.5 #defaults to 1
 variable f1 equal 100 #GHz
 variable f2 equal 30
 variable T1 equal 1000/${f1}
 variable T2 equal 1000/${f2}
-variable A1 equal ${T1}/20
+variable A1 equal (${T1}/20)*${amplify_ratio}
 variable B1 equal -1*${A1}
-variable A2 equal ${T2}/20
-variable Q equal 6*${T2}
+variable A2 equal (${T2}/20)*${amplify_ratio}
+variable B2 equal -1*${A2}
+variable Q equal 5*${T2}
 # Q is temporary symbol of 3.5 times T.
 #timestep unit is ps. f = 1000 / T GHz.
 variable omega1 equal 2.0*PI/${T1}
