@@ -188,7 +188,8 @@ variable T2 equal 1000/${f2}
 variable A1 equal ${T1}/20
 variable B1 equal -1*${A1}
 variable A2 equal ${T2}/20
-variable Q equal 6*${T2}
+variable B2 equal -1*${A2}
+variable Q equal 5*${T2}
 # Q is temporary symbol of 3.5 times T.
 #timestep unit is ps. f = 1000 / T GHz.
 variable omega1 equal 2.0*PI/${T1}
