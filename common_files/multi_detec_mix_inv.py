@@ -259,21 +259,25 @@ ax.plot(x_detecs_array[0], wave_velocity_at_detecs_array,
         marker="o", linestyle="none")
 plt.savefig("x_vs_velocity.png")
 
+fig, ax = plt.subplots()
 title = "x vs f1 amplitude"
 plt.plot(x_detecs_array[0, :], a_f1_at_detecs, marker="o", linestyle="none")
 plt.title(title)
 plt.savefig(title+".png")
 
+fig, ax = plt.subplots()
 title="x vs f2 amplitude"
 plt.plot(x_detecs_array[0, :], a_f2_at_detecs, marker="o", linestyle="none")
 plt.title(title)
 plt.savefig(title+".png")
 
+fig, ax = plt.subplots()
 title = "x vs fsum amplitude"
 plt.plot(x_detecs_array[0, :], a_fsum_at_detecs, marker="o", linestyle="none")
 plt.title("x vs fsum amplitude")
 plt.savefig(title+".png")
 
+fig, ax = plt.subplots()
 title="x vs fdif amplitude"
 plt.plot(x_detecs_array[0, :], a_fdif_at_detecs, marker="o", linestyle="none")
 plt.title(title)
