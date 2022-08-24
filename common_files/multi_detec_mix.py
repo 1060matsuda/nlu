@@ -15,8 +15,7 @@ from scipy import signal
 from python_modules import FFT_utility as fu
 
 HPC_OR_LOCAL = "LOCAL"
-imputFileName = os.environ["MYWORK"] + \
-    "/freqmix/30_100/1/outp_1.csv"
+imputFileName = "outp_1.csv"
 data_raw = fu.loadCsvOutput(imputFileName)
 freq_f1 = 100  # GHz
 """Bigger frequency [GHz]"""
