@@ -259,3 +259,21 @@ def wave_arrival_zerocross(u_at_x, dx_wavesource_and_x, v_temp, timestep, T):
     #   = dx/(arrival_timestep*timestep)*100 [m/s]
     velocity = dx_wavesource_and_x/(arrival_timestep*timestep)*100
     return zerocross_timestep, arrival_timestep, velocity
+
+def wave_arrival_zerocross_inv(u_at_x, dx_wavesource_and_x, v_temp, timestep, T):
+    """Returns the velocity calculated with zerocross method at x=x.
+    You need to input displacement timeseries at x[A], 
+    distance between the wavesource and x[A],
+    temporary velocity (e.g. expt value)[m/s],
+    timestep [ps/step], and the wave cycle T [ps].
+    """
+    dt_wavesource_and_x = dx_wavesource_and_x*100/v_temp  # ps = A*100/(pm/ps)
+    search_start_timestep = int(dt_wavesource_and_x/timestep+3*T/4/timestep)
+    zerocross_timestep = getDownwardZeroCrossIndexFromArbitraryPoint(
+        u_at_x, search_start_timestep)
+    arrival_timestep = int(zerocross_timestep - T/timestep)
+    # v = dx [A] / (arrival_timestep[step]*timestep[ps/step])
+    #   = dx/(arrival_timestep*timestep) [A/ps= 10^-10m/10^-12s = 100m/s]
+    #   = dx/(arrival_timestep*timestep)*100 [m/s]
+    velocity = dx_wavesource_and_x/(arrival_timestep*timestep)*100
+    return zerocross_timestep, arrival_timestep, velocity
