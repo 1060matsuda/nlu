@@ -268,17 +268,17 @@ plt.savefig(title+".png")
 title="x vs f2 amplitude"
 plt.plot(x_detecs_array[0, :], a_f2_at_detecs, marker="o", linestyle="none")
 plt.title(title)
-plt.show(title+".png")
+plt.savefig(title+".png")
 
 title = "x vs fsum amplitude"
 plt.plot(x_detecs_array[0, :], a_fsum_at_detecs, marker="o", linestyle="none")
 plt.title("x vs fsum amplitude")
-plt.show(title+".png")
+plt.savefig(title+".png")
 
 title="x vs fdif amplitude"
 plt.plot(x_detecs_array[0, :], a_fdif_at_detecs, marker="o", linestyle="none")
 plt.title(title)
-plt.show(title+".png")
+plt.savefig(title+".png")
 
 
 fig, ax = plt.subplots()
