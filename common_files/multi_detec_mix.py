@@ -15,12 +15,15 @@ import csv
 from scipy import signal
 from python_modules import FFT_utility as fu
 
+with open("config.yaml", "r") as yml:
+    config = yaml.safe_load(yml)
+
 HPC_OR_LOCAL = "LOCAL"
 imputFileName = "outp_1.csv"
 data_raw = fu.loadCsvOutput(imputFileName)
-freq_f1 = 100  # GHz
+freq_f1 = config["f1"]  # GHz
 """Bigger frequency [GHz]"""
-freq_f2 = 30
+freq_f2 = config["f2"]
 """Smaller frequency [GHz]"""
 freq_fsum = freq_f1+freq_f2
 """Frequency sum [GHz]"""
@@ -157,7 +160,7 @@ for i in range(detecs_num):
     trimmedWave = u_detec[window_start_timestep:window_start_timestep+N_fgcd]
     trimmedTime = time[window_start_timestep:window_start_timestep+N_fgcd]
 
-    windowedWave = fu.window(trimmedWave, "hann")
+    windowedWave = fu.window(trimmedWave)
     #paddedWave = fu.zeroPadding(windowedWave)
     #paddedWaveWithoutWindow = fu.zeroPadding(trimmedWave)
 
