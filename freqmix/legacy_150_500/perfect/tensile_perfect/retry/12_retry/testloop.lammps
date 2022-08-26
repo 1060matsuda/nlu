@@ -1,0 +1,123 @@
+#################################
+#two psrts have to be corrected
+#Vacancy >> type : Fe Fe Fe Fe Fe Fe Fe Fe Fe
+#Cu      >> type : Fe Fe Fe Fe Fe Fe Fe Fe Fe Cu
+#################################
+
+variable npt_temp      equal 0.1
+
+variable atmos        equal 1.01325                    # Atomic Mass
+
+units       metal 
+atom_style  atomic
+boundary p p p
+
+#timestep .0001
+timestep    0.001
+#timestep    0.01
+#timestep 0.1
+read_data   ./Fe_tensile.lat
+
+pair_style  eam/alloy
+pair_coeff  * * ./FeCuNi.eam.alloy Fe Fe Fe Fe Fe Fe Fe Fe Fe
+#pair_coeff  * * ./new_potential/FeCuNi.eam.alloy Fe Fe Fe Fe Cu
+#mass        *4 ${mass}
+#pair_style  aenet
+#pair_coeff  * * v03 Fe 10sw-10sw.nn Fe Fe Fe Fe Fe
+#pair_coeff  * * ./new_potential/FeCuNi.eam.alloy Fe Fe Fe Fe Cu
+#mass        *4 ${mass}
+mass        * 55.845
+#mass        5 58.454 correct value!!!
+
+#group naming
+group source type 2
+group detector type 3
+group edge type 5
+group edge_buf type 7
+group buffer type 7 8 9
+#group longage type 9
+
+variable s equal xcm(source,x)
+variable d equal xcm(detector,x)
+variable g equal xcm(edge,x)
+variable t equal temp
+variable p equal press
+variable v equal vol
+variable e equal etotal
+variable i equal time
+variable FIG string iranai
+variable f equal fcm(detector,x)
+variable l equal vcm(detector,x)
+
+##############################################
+variable rescaleSteps equal 0
+variable relaxationSteps equal 0
+variable initialSteps equal ${rescaleSteps}+${relaxationSteps}
+##############################################
+
+#dump fuck all atom 1 strain.dump 
+#dump_modify fuck scale no
+
+thermo 1
+thermo_style custom time step lx pxx pxy pxz ly lz pyy pzz pyz etotal temp vol
+
+#fix extra all print 1 "$i $s $d $g $l $f $t $v $e $p" file outp.txt
+
+
+fix nve1 all nve
+run 0
+#minimize 1.0e-30 1.0e-30 100000 100000
+variable oshikko equal pxx
+variable p0 equal ${oshikko}
+variable unko equal lx 
+variable lx0 equal ${unko}
+
+variable current_time equal time
+
+variable boxlen equal lx
+variable boxwidth equal ly
+variable pressure equal pxx
+variable epsilon equal ln(lx/${lx0})
+variable sigma equal abs(pxx-${p0})
+fix extra all print 1 "${boxlen} ${boxwidth} ${pressure} ${sigma} ${epsilon} ${current_time} $t" file sscurve.txt
+
+#fix strain all deform 1000 x trate 0.0001
+#fix strain1 all deform 1 x scale 1.0001
+#run 1
+#minimize 1.0e-30 1.0e-30 100000 100000
+#unfix strain1
+#fix strain2 all deform 1 x scale 1.0001
+#run 1
+#minimize 1.0e-30 1.0e-30 100000 100000
+#unfix strain2
+#fix strain1 all deform 1 x scale 1.0001
+#run 1
+#minimize 1.0e-30 1.0e-30 100000 100000
+#quit
+label looptest
+variable shimiken loop 5
+print "shimiken ${shimiken}"
+next shimiken
+jump SELF looptest
+print "owari"
+quit 
+
+
+
+
+minimize 1.0e-30 1.0e-30 100000 100000
+label		deformationLoop
+#variable	i loop 25
+variable	j loop 5
+variable 	expRate equal 1+0.0001*$j
+fix strain 	all deform 1 x scale ${expRate}	
+run 		1
+print 		"${boxlen} ${boxwidth} ${pressure} ${sigma} ${epsilon} ${current_time} $t" append sstest.txt 
+print 		"run 1 end"
+minimize 	1.0e-30 1.0e-30 100000 100000
+print 		"${boxlen} ${boxwidth} ${pressure} ${sigma} ${epsilon} ${current_time} $t" append ssminimize.txt 
+print 		"minimize end"
+#if "$i == 25" then quit
+next j
+jump SELF deformationLoop
+quit

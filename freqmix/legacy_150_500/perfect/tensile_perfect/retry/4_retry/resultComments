@@ -1,0 +1,3 @@
+nve relaxation after each deformation seems to be insufficient.
+I set deform 1000 x ..., but more than 1000 may be necessary?
+next 10000.
