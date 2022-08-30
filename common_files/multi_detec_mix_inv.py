@@ -260,10 +260,10 @@ for i in range(detecs_num):
     beta_SHGs_at_detecs[i] = beta_shg
     beta_SHGs_at_detecs_corrected[i] = beta_shg_corrected
 
-    if i == detecs_num-3:
+    """if i == detecs_num-3:
         fig, ax = plt.subplots()
         ax.plot(trimmedTime, waveToTransform)
-        plt.savefig("wave_of_detector #"+str(i)+".png", format="png")
+        plt.savefig("wave_of_detector #"+str(i)+".png", format="png")"""
         
 
 print("Drawing the graphs at the right end detector...")
