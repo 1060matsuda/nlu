@@ -57,8 +57,10 @@ detecs_num = data_raw_cols - non_detec_cols
 
 time = data_raw[:, 0]
 timestep = time[1] - time[0]
-if (int(time[-1]/timestep)!=len(time)+1):
+if (int(time[-1]/timestep)!=len(time)-1):
     print("Data is possibly broken. Check if the data lacks information at some timestep.")
+    print(int(time[-1]/timestep))
+    print(len(time)-1)
     sys.exit()
 x_source = data_raw[:, 1]
 x_detecs_array = data_raw[:, 2:2+detecs_num]
@@ -325,3 +327,194 @@ ax.legend()
 plt.savefig(title+".png")
 # detector 0からM-1 が外れ値をとっている場合がある．その場合N以降でslopeを取ったほうが良い．
 # 外れていない場合は M=0
+
+N=0
+res_sum = np.polyfit(
+    x_detecs_array[0, N:], y_sum_corrected[N:], 1)
+linear = np.poly1d(res_sum)(x_detecs_array[0, N:])
+plt.plot(x_detecs_array[0, N:], linear)
+plt.plot(x_detecs_array[0, N:], y_sum_corrected[N:], marker="o", linestyle="none")
+plt.title("$a_{sum}/a_1/a_2$, with a=a(x)")
+plt.savefig("ysum_linear_fit.png")
+#print(res_sum[0])
+beta_slope_sum = res_sum[0]*4*wavelength_f1*wavelength_f2*10**10/4/np.pi**2
+print("beta_slope_sum")
+print(beta_slope_sum)
+print()
+  
+
+M=0
+res_dif = np.polyfit(
+    x_detecs_array[0, M:], y_dif_corrected[M:], 1)
+linear = np.poly1d(res_dif)(x_detecs_array[0, M:])
+plt.plot(x_detecs_array[0, M:], linear)
+plt.plot(x_detecs_array[0, M:], y_dif_corrected[M:], marker="o", linestyle="none")
+plt.title("$a_{dif}/a_1/a_2$, with a=a(x)")
+plt.savefig("ydif_linear_fit.png")
+#print(res_dif[0])
+beta_slope_dif = res_dif[0]*4*wavelength_f1*wavelength_f2*10**10/4/np.pi**2
+print("beta_slope_dif")
+print(beta_slope_dif)
+print()
+
+print("average")
+beta_slope_ave=(beta_slope_dif+beta_slope_sum)/2
+print(beta_slope_ave)
+
+# %%
+print("beta_sum_rightend_detec, corrected")
+print(beta_sums_at_detecs_corrected[-1])
+print("beta_sum_rightend_detec, raw")
+print(beta_sums_at_detecs[-1])
+print("beta_ave_rightend_detec, corrected")
+print((beta_difs_at_detecs_corrected[-1]+beta_sums_at_detecs_corrected[-1])/2)
+print("beta_ave_rightend_detec, raw")
+print((beta_sums_at_detecs[-1]+beta_difs_at_detecs[-1])/2)
+print("beta_dif_rightend_detec, corrected")
+print(beta_difs_at_detecs_corrected[-1])
+print("beta_ave_rightend_detec, raw")
+print(beta_difs_at_detecs[-1])
+
+fig, ax = plt.subplots()
+
+ax.plot(x_detecs_array[0, :], beta_sums_at_detecs_corrected,
+        marker="o", linestyle="none", label=r"$\beta _{corr},sum$")
+ax.plot(x_detecs_array[0, :], beta_sums_at_detecs, marker="o",
+        linestyle="none", label=r"$\beta_{source}$,sum")
+ax.plot(x_detecs_array[0, :], beta_difs_at_detecs_corrected,
+        marker="o", linestyle="none", label=r"$\beta _{corr},dif$")
+ax.plot(x_detecs_array[0, :], beta_difs_at_detecs, marker="o",
+        linestyle="none", label=r"$\beta_{source}$,dif")
+ax.plot(x_detecs_array[0, :], beta_aves_at_detecs,
+        marker="o", linestyle="none", label=r"$\beta _{source},ave$")
+ax.axhline(y=beta_slope_sum, linestyle="--",
+           label=r"$\beta _{slope}$,sum")
+ax.axhline(y=beta_slope_dif, linestyle=":",
+            label=r"$\beta _{slope}$,dif")
+ax.axhline(y=beta_slope_ave, linestyle="dashdot",
+            label=r"$\beta _{slope}$,ave")
+#ax.set_xlim([400,699])
+ax.set_ylim([2,3.5])
+ax.legend()
+plt.savefig("betas_vs_x.png")
+
+
+# %%
+i=int(-1)
+# ゼロクロス法の音速測定
+# Δx_source_and_detec[A]*100[pm/A] / v[pm/ps] = Δt_source_and_detec [ps]
+# この時刻から半周期たった時（first positive peak）を基準に，そこからゼロクロス法を行う
+x_detec = x_detecs_array[:, i]
+u_detec = u_detecs_array[:, i]
+delta_x_source_to_thisdetec = x_detec[0] - x_source[0]
+
+window_start_timestep = int(
+    zerocross_timestep_at_detecs_array[i] - 2*T_f2/timestep)
+
+# ここまで音速測定
+
+trimmedWave = u_detec[window_start_timestep:window_start_timestep+N_fgcd]
+trimmedTime = time[window_start_timestep:window_start_timestep+N_fgcd]
+
+windowedWave = fu.window(trimmedWave, "hann")
+#paddedWave = fu.zeroPadding(windowedWave)
+#paddedWaveWithoutWindow = fu.zeroPadding(trimmedWave)
+
+##SUPER IMPORTANT##
+waveToTransform = windowedWave
+##CHOU DAIJI##
+
+"""if (i==detecs_num-2):
+    plt.plot(time, u_detec)
+    plt.axvline(x=window_start_timestep*timestep)
+    plt.axvline(x=(window_start_timestep+N_fgcd)*timestep)
+    plt.show()"""
+
+# FFT. transformedArray: [0]=power, [1]=freq
+# FFTedData = fftWithWindow(trimmedWave, "hann") #window = "hann" or "hamming"
+#FFTedData = fftWithWindow(zeroPadding(trimmedWave), "hann")
+ffted_data = fu.FFTonly(waveToTransform, timestep)
+#FFTedData=FFTonly(window(trimmedWave, "hann"))
+abs_ffted_data = np.abs(ffted_data)
+
+index_fsum = fu.getIndexOfNearestValue(abs_ffted_data[1], freq_fsum*10**9)
+A_fsum = abs_ffted_data[0][index_fsum]
+a_fsum = A_fsum*2/int(len(waveToTransform))*10**-10
+a_fsum_at_detecs[i] = a_fsum
+
+index_fdif = fu.getIndexOfNearestValue(abs_ffted_data[1], freq_fdif*10**9)
+A_fdif = abs_ffted_data[0][index_fdif]
+a_fdif = A_fdif*2/int(len(waveToTransform))*10**-10
+a_fdif_at_detecs[i] = a_fdif
+
+index_f1 = fu.getIndexOfNearestValue(abs_ffted_data[1], freq_f1*10**9)
+A_f1 = abs_ffted_data[0][index_f1]
+a_f1 = A_f1*2/int(len(waveToTransform))*10**-10
+a_f1_at_detecs[i] = a_f1
+
+index_f2 = fu.getIndexOfNearestValue(abs_ffted_data[1], freq_f2*10**9)
+A_f2 = abs_ffted_data[0][index_f2]
+a_f2 = A_f2 * 2/int(len(waveToTransform))*10**-10
+a_f2_at_detecs[i] = a_f2
+
+beta_mix = fu.getBetaFreqMix(a_fsum, a_fdif, source_amp_f1*10**-10, source_amp_f2*10**-10,
+                                freq_f1*10**9, freq_f2*10**9, delta_x_source_to_thisdetec*10**-10, wave_velocity)
+beta_mix_corrected = fu.getBetaFreqMix(
+    a_fsum, a_fdif, a_f1, a_f2, freq_f1*10**9, freq_f2*10**9, delta_x_source_to_thisdetec*10**-10, wave_velocity_at_detecs_array[i])
+
+beta_sum = beta_mix[0]
+beta_sum_corrected = beta_mix_corrected[0]
+beta_sums_at_detecs[i] = beta_sum
+beta_sums_at_detecs_corrected[i] = beta_sum_corrected
+
+beta_dif = beta_mix[1]
+beta_dif_corrected = beta_mix_corrected[1]
+beta_difs_at_detecs[i] = beta_dif
+beta_difs_at_detecs_corrected[i] = beta_dif_corrected
+
+# higher harmonics amplitude[arb]
+harmonicsIndex = fu.getIndexUpToSixthHarmonic(
+    abs_ffted_data[1], freq_f1*10**9)
+A_f1 = abs_ffted_data[0][harmonicsIndex[0]]
+A_2f1 = abs_ffted_data[0][harmonicsIndex[1]]
+A_3f1 = abs_ffted_data[0][harmonicsIndex[2]]
+A_4f1 = abs_ffted_data[0][harmonicsIndex[3]]
+A_5f1 = abs_ffted_data[0][harmonicsIndex[4]]
+A_6f1 = abs_ffted_data[0][harmonicsIndex[5]]
+
+a_f1 = A_f1*2/int(len(waveToTransform))*10**-10
+a_f1_at_detecs[i] = a_f1
+
+a_2f1 = A_2f1*2/int(len(waveToTransform))*10**-10
+a_2f1_at_detecs[i] = a_2f1
+
+a_3f1 = A_3f1*2/int(len(waveToTransform))*10**-10
+a_3f1_at_detecs[i] = a_3f1
+
+a_4f1 = A_4f1*2/int(len(waveToTransform))*10**-10
+a_4f1_at_detecs[i] = a_4f1
+
+a_f1_source = source_amp_f1*10**-10
+a_f2_source = source_amp_f2*10**-10
+
+beta_shg = fu.getBetaSHG(a_f1_source, a_2f1, wavelength_f1,
+                            delta_x_source_to_thisdetec*(10**-10))
+beta_shg_corrected = fu.getBetaSHG(
+    a_f1, a_2f1, wavelength_f1, delta_x_source_to_thisdetec*(10**-10))
+"""with open("betaSHG.txt", "w") as f:
+    f.write(str(betaSHG))
+"""
+beta_SHGs_at_detecs[i] = beta_shg
+beta_SHGs_at_detecs_corrected[i] = beta_shg_corrected
+
+fig, ax = plt.subplots()
+ax.set_yscale("log")
+#ax.plot(absFFTData[1,1:int(N/2)], absFFTData[0,1:int(N/2)])
+ax.plot(abs_ffted_data[1, 0:fu.getIndexOfNearestValue(abs_ffted_data[1], max(freq_f1*10**9, freq_f2*10**9))*4],
+        abs_ffted_data[0, 0:fu.getIndexOfNearestValue(abs_ffted_data[1], max(freq_f1*10**9, freq_f2*10**9))*4], marker="o", linestyle="--")
+ax.set_xlabel("Freqency [Hz]")
+ax.set_ylabel("Amplitude [arb.]")
+ax.grid()
+plt.title("Frequency spectrum")
+plt.savefig("freq_spectrum_rightend_detector.png")
+
