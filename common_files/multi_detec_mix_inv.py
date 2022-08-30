@@ -61,10 +61,11 @@ detecs_num = data_raw_cols - non_detec_cols
 
 time = data_raw[:, 0]
 timestep = time[1] - time[0]
+print(int(time[-1]/timestep))
+print(len(time)-1)
+
 if (int(time[-1]/timestep)!=len(time)-1):
     print("Data is possibly broken. Check if the data lacks information at some timestep.")
-    print(int(time[-1]/timestep))
-    print(len(time)-1)
     sys.exit()
 x_source = data_raw[:, 1]
 x_detecs_array = data_raw[:, 2:2+detecs_num]
