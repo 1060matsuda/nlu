@@ -20,7 +20,11 @@ with open("config.yaml", "r") as yml:
 
 HPC_OR_LOCAL = "LOCAL"
 imputFileName = "outp_1.csv"
+
+print("Loading the csv file...")
 data_raw = fu.loadCsvOutput(imputFileName)
+print("CSV file has been loaded")
+
 freq_f1 = config["f1"]  # GHz
 """Bigger frequency [GHz]"""
 freq_f2 = config["f2"]
@@ -121,7 +125,9 @@ wave_velocity_at_detecs_array = np.zeros(detecs_num)
 zerocross_timestep_at_detecs_array = np.zeros(detecs_num)
 arrival_timestep_at_detecs_array = np.zeros(detecs_num)
 
+print("Analysis has started...")
 for i in range(detecs_num):
+    print("Memorizing the waveform at detector"+str(i)+"...")
     x_detec = x_detecs_array[:, i]
     u_detec = u_detecs_array[:, i]
     delta_x_source_to_thisdetec = x_detec[0] - x_source[0]
@@ -150,6 +156,7 @@ for i in range(detecs_num):
     # ゼロクロス法の音速測定
     # Δx_source_and_detec[A]*100[pm/A] / v[pm/ps] = Δt_source_and_detec [ps]
     # この時刻から半周期たった時（first positive peak）を基準に，そこからゼロクロス法を行う
+    print("Transforming the waveform at the detector "+str(i)+"...")
     x_detec = x_detecs_array[:, i]
     u_detec = u_detecs_array[:, i]
     delta_x_source_to_thisdetec = x_detec[0] - x_source[0]
@@ -259,6 +266,7 @@ for i in range(detecs_num):
         plt.savefig("wave_of_detector #"+str(i)+".png", format="png")
         
 
+print("Drawing the graphs at the right end detector...")
 beta_aves_at_detecs=(beta_sums_at_detecs+ beta_difs_at_detecs)/2
 
 fig, ax = plt.subplots()
