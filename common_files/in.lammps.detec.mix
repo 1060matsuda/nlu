@@ -128,7 +128,7 @@ variable initialSteps equal ${rescaleSteps}+${relaxationSteps}
 thermo 1
 #thermo_style custom time v_sox v_dex temp vol etotal v_FIG
 
-fix extra all print 1 "$i ${u1} ${u2} ${u3} ${u4} ${u5} ${u6} ${u7} ${u8} ${u9} ${u10} ${u11} ${u12} ${u13} ${u14} ${u15} ${u16} ${u17} ${u18} ${u19} ${u20} ${u21} ${u22} ${u23} ${u24} ${u25} ${u26} ${u27} ${u28} ${u29} ${u30} ${u31}" file outp_1.txt
+
 
 #minimize 1.0e-18 1.0e-18 100000 100000
 #fix npt1 all npt temp ${npt_temp} ${npt_temp} 1 iso ${atmos} ${atmos} 1
@@ -215,7 +215,7 @@ variable myv equal ${A1}*cos(${omega1}*time)+${A2}*cos(${omega2}*time)
 #variable myx equal $A*sin(${omega1}*time)
 #variable myv equal $A*cos(${omega1}*time)  
 ###
-
+fix extra all print 1 "$i ${u1} ${u2} ${u3} ${u4} ${u5} ${u6} ${u7} ${u8} ${u9} ${u10} ${u11} ${u12} ${u13} ${u14} ${u15} ${u16} ${u17} ${u18} ${u19} ${u20} ${u21} ${u22} ${u23} ${u24} ${u25} ${u26} ${u27} ${u28} ${u29} ${u30} ${u31}" file outp_1.txt
 
 #the extra output file below should be processed by using OVITO
 ###正弦波を導入する。同位相なら$A,逆位相なら$B
