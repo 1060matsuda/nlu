@@ -353,7 +353,8 @@ beta_slope_sum = res_sum[0]*4*wavelength_f1*wavelength_f2*10**10/4/np.pi**2
 print("beta_slope_sum")
 print(beta_slope_sum)
 print()
-  
+with open("beta.csv", mode='a') as f:
+    f.write(beta_slope_sum)
 
 M=0
 res_dif = np.polyfit(
@@ -368,24 +369,45 @@ beta_slope_dif = res_dif[0]*4*wavelength_f1*wavelength_f2*10**10/4/np.pi**2
 print("beta_slope_dif")
 print(beta_slope_dif)
 print()
+with open("beta.csv", mode='a') as f:
+    f.write(beta_slope_dif)
 
 print("average")
 beta_slope_ave=(beta_slope_dif+beta_slope_sum)/2
 print(beta_slope_ave)
+with open("beta.csv", mode='a') as f:
+    f.write(","+str(beta_slope_ave))
 
 # %%
 print("beta_sum_rightend_detec, corrected")
 print(beta_sums_at_detecs_corrected[-1])
+with open("beta.csv", mode='a') as f:
+    f.write(","+str(beta_sums_at_detecs_corrected[-1]))
+
 print("beta_sum_rightend_detec, raw")
 print(beta_sums_at_detecs[-1])
+with open("beta.csv", mode='a') as f:
+    f.write(","+str(beta_sums_at_detecs[-1]))
+
 print("beta_ave_rightend_detec, corrected")
 print((beta_difs_at_detecs_corrected[-1]+beta_sums_at_detecs_corrected[-1])/2)
+with open("beta.csv", mode='a') as f:
+    f.write(","+str((beta_difs_at_detecs_corrected[-1]+beta_sums_at_detecs_corrected[-1])/2))
+
 print("beta_ave_rightend_detec, raw")
 print((beta_sums_at_detecs[-1]+beta_difs_at_detecs[-1])/2)
+with open("beta.csv", mode='a') as f:
+    f.write(","+str((beta_sums_at_detecs[-1]+beta_difs_at_detecs[-1])/2))
+
 print("beta_dif_rightend_detec, corrected")
 print(beta_difs_at_detecs_corrected[-1])
+with open("beta.csv", mode='a') as f:
+    f.write(","+str(beta_difs_at_detecs_corrected[-1]))
+
 print("beta_ave_rightend_detec, raw")
 print(beta_difs_at_detecs[-1])
+with open("beta.csv", mode='a') as f:
+    f.write(","+str(beta_difs_at_detecs[-1]))
 
 fig, ax = plt.subplots()
 
@@ -531,4 +553,3 @@ ax.set_ylabel("Amplitude [arb.]")
 ax.grid()
 plt.title("Frequency spectrum")
 plt.savefig("freq_spectrum_rightend_detector.png")
-
