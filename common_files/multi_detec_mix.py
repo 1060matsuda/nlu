@@ -95,6 +95,8 @@ beta_sums_at_detecs_corrected = np.zeros(detecs_num)
 beta_difs_at_detecs = np.zeros(detecs_num)
 beta_difs_at_detecs_corrected = np.zeros(detecs_num)
 beta_aves_at_detecs= np.zeros(detecs_num)
+beta_aves_at_detecs_corrected= np.zeros(detecs_num)
+
 #betaSHGArrayCorrected = np.zeros((len(freqs_f_1), len(detecs)))
 
 #wavelength_f1 = np.zeros(len(freqs_f_1))
@@ -269,6 +271,7 @@ for i in range(detecs_num):
 
 print("Drawing the graphs at the right end detector...")
 beta_aves_at_detecs=(beta_sums_at_detecs+ beta_difs_at_detecs)/2
+beta_aves_at_detecs_corrected=(beta_sums_at_detecs_corrected+ beta_difs_at_detecs_corrected)/2
 
 fig, ax = plt.subplots()
 ax.set_xlabel(r"propagation distance $x (\mathrm{\AA)}$ ")
@@ -396,6 +399,8 @@ ax.plot(x_detecs_array[0, :], beta_difs_at_detecs, marker="o",
         linestyle="none", label=r"$\beta_{source}$,dif")
 ax.plot(x_detecs_array[0, :], beta_aves_at_detecs,
         marker="o", linestyle="none", label=r"$\beta _{source},ave$")
+ax.plot(x_detecs_array[0, :], beta_aves_at_detecs_corrected,
+        marker="o", linestyle="none", label=r"$\beta _{corr},ave$")      
 ax.axhline(y=beta_slope_sum, linestyle="--",
            label=r"$\beta _{slope}$,sum")
 ax.axhline(y=beta_slope_dif, linestyle=":",
@@ -404,8 +409,8 @@ ax.axhline(y=beta_slope_ave, linestyle="dashdot",
             label=r"$\beta _{slope}$,ave")
 #ax.set_xlim([400,699])
 ax.set_ylim([2,3.5])
-ax.legend()
-plt.savefig("betas_vs_x.png")
+ax.legend(loc="upper left", bbox_to_anchor=(1,1))
+plt.savefig("betas_vs_x.png", bbox_inches="tight")
 
 
 # %%
