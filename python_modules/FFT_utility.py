@@ -242,15 +242,18 @@ def getBetaFreqMix(aSum, aDif, aF1, aF2, freq1, freq2, DeltaX, vel):
     return np.array([4*aSum/DeltaX/aF1/aF2/K1/K2, 4*aDif/DeltaX/aF1/aF2/K1/K2, 4*aMix/DeltaX/aF1/aF2/K1/K2])
 
 
-def wave_arrival_zerocross(u_at_x, dx_wavesource_and_x, v_temp, timestep, T):
+def wave_arrival_zerocross(u_at_x, dx_wavesource_and_x, v_temp, timestep, T, rate=3/4):
     """Returns the velocity calculated with zerocross method at x=x.
+    Note that this method searches the UPWARD zerocross point. 
     You need to input displacement timeseries at x[A], 
     distance between the wavesource and x[A],
     temporary velocity (e.g. expt value)[m/s],
     timestep [ps/step], and the wave cycle T [ps].
+    If you specify the rate, the zerocross search will start at the timestep
+    where the elapsed time is rate*waveperiod since the wave arrived at the detector.
     """
     dt_wavesource_and_x = dx_wavesource_and_x*100/v_temp  # ps = A*100/(pm/ps)
-    search_start_timestep = int(dt_wavesource_and_x/timestep+3*T/4/timestep)
+    search_start_timestep = int(dt_wavesource_and_x/timestep+rate*T/timestep)
     zerocross_timestep = getUpwardZeroCrossIndexFromArbitraryPoint(
         u_at_x, search_start_timestep)
     arrival_timestep = int(zerocross_timestep - T/timestep)
@@ -260,15 +263,17 @@ def wave_arrival_zerocross(u_at_x, dx_wavesource_and_x, v_temp, timestep, T):
     velocity = dx_wavesource_and_x/(arrival_timestep*timestep)*100
     return zerocross_timestep, arrival_timestep, velocity
 
-def wave_arrival_zerocross_inv(u_at_x, dx_wavesource_and_x, v_temp, timestep, T):
+def wave_arrival_zerocross_inv(u_at_x, dx_wavesource_and_x, v_temp, timestep, T, rate=3/4):
     """Returns the velocity calculated with zerocross method at x=x.
     You need to input displacement timeseries at x[A], 
     distance between the wavesource and x[A],
     temporary velocity (e.g. expt value)[m/s],
     timestep [ps/step], and the wave cycle T [ps].
+    If you specify the rate, the zerocross search will start at the timestep
+    where the elapsed time is rate*waveperiod since the wave arrived at the detector.
     """
     dt_wavesource_and_x = dx_wavesource_and_x*100/v_temp  # ps = A*100/(pm/ps)
-    search_start_timestep = int(dt_wavesource_and_x/timestep+3*T/4/timestep)
+    search_start_timestep = int(dt_wavesource_and_x/timestep+rate*T/timestep)
     zerocross_timestep = getDownwardZeroCrossIndexFromArbitraryPoint(
         u_at_x, search_start_timestep)
     arrival_timestep = int(zerocross_timestep - T/timestep)
