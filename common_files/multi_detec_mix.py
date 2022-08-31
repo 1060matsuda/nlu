@@ -354,7 +354,7 @@ print("beta_slope_sum")
 print(beta_slope_sum)
 print()
 with open("beta.csv", mode='a') as f:
-    f.write(beta_slope_sum)
+    f.write(str(beta_slope_sum))
 
 M=0
 res_dif = np.polyfit(
@@ -370,7 +370,7 @@ print("beta_slope_dif")
 print(beta_slope_dif)
 print()
 with open("beta.csv", mode='a') as f:
-    f.write(beta_slope_dif)
+    f.write(","+str(beta_slope_dif))
 
 print("average")
 beta_slope_ave=(beta_slope_dif+beta_slope_sum)/2
