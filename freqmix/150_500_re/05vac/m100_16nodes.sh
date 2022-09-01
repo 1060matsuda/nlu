@@ -18,6 +18,6 @@ module load spectrum_mpi/
 #module load autoload lammps/29sep2021
 
 #mpirun -np 64 /m100_work/FUSIO_ja5HeBub/lammps/src/lmp_mpi -in in_default.lammps # 32 MPI tasks, 4 GPUs per  node
-mpirun -np 512 /m100_work/FUSIO_ja5HeBub/lammps/src/lmp_mpi -in in.lammps.detec.mix # 32 MPI tasks, 4 GPUs per node
+mpirun -np 512 /m100_work/FUSIO_ja5HeBub/lammps/src/lmp_mpi -in mod_in.lammps.mix # 32 MPI tasks, 4 GPUs per node
 
 #mpirun -gpu -np 128  lmp_kokkos_cuda_mpi -k on g 4  -sf kk -in in_default.lammps # 4 MPI tasks, 4 GPUs #error occurs with this line ;_;

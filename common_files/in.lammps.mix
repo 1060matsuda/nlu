@@ -215,11 +215,11 @@ variable myv equal ${A1}*cos(${omega1}*time)+${A2}*cos(${omega2}*time)
 #variable myx equal $A*sin(${omega1}*time)
 #variable myv equal $A*cos(${omega1}*time)  
 ###
-fix extra all print 1 "$i ${u1} ${u2} ${u3} ${u4} ${u5} ${u6} ${u7} ${u8} ${u9} ${u10} ${u11} ${u12} ${u13} ${u14} ${u15} ${u16} ${u17} ${u18} ${u19} ${u20} ${u21} ${u22} ${u23} ${u24} ${u25} ${u26} ${u27} ${u28} ${u29} ${u30} ${u31}" file outp_1.txt
 
+fix extra all print 1 "$i $s $d $g $l $f $t $v $e $p" file outp_1.txt
 #the extra output file below should be processed by using OVITO
 ###正弦波を導入する。同位相なら$A,逆位相なら$B
-fix 2 d1 move variable v_myx NULL NULL v_myv NULL NULL
+fix 2 source move variable v_myx NULL NULL v_myv NULL NULL
 ##force setting
 #variable frc equal $m*10/$F*v_omega*v_omega*swiggle(0.0,$A,$T)
 #fix 2 source setforce v_frc NULL NULL
