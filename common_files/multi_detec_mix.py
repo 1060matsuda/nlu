@@ -270,7 +270,7 @@ for i in range(detecs_num):
     """if i == detecs_num-3:
         fig, ax = plt.subplots()
         ax.plot(trimmedTime, waveToTransform)
-        plt.savefig("wave_of_detector #"+str(i)+".png", format="png")"""
+        plt.savefig("wave_of_detector_"+str(i)+".png", format="png")"""
 
 # %%
 print("Drawing the graphs at the right end detector...")
@@ -286,25 +286,25 @@ ax.plot(x_detecs_array[0], wave_velocity_at_detecs_array,
 plt.savefig("x_vs_velocity.png")
 
 fig, ax = plt.subplots()
-title = "x vs f1 amplitude"
+title = "x_vs_f1_amplitude"
 plt.plot(x_detecs_array[0, :], a_f1_at_detecs, marker="o", linestyle="none")
 plt.title(title)
 plt.savefig(title+".png")
 
 fig, ax = plt.subplots()
-title = "x vs f2 amplitude"
+title = "x_vs_f2_amplitude"
 plt.plot(x_detecs_array[0, :], a_f2_at_detecs, marker="o", linestyle="none")
 plt.title(title)
 plt.savefig(title+".png")
 
 fig, ax = plt.subplots()
-title = "x vs fsum amplitude"
+title = "x_vs_fsum_amplitude"
 plt.plot(x_detecs_array[0, :], a_fsum_at_detecs, marker="o", linestyle="none")
-plt.title("x vs fsum amplitude")
+plt.title(title)
 plt.savefig(title+".png")
 
 fig, ax = plt.subplots()
-title = "x vs fdif amplitude"
+title = "x_vs_fdif_amplitude"
 plt.plot(x_detecs_array[0, :], a_fdif_at_detecs, marker="o", linestyle="none")
 plt.title(title)
 plt.savefig(title+".png")
