@@ -36,11 +36,9 @@ freq_fdif = freq_f1 - freq_f2
 """Frequency difference [GHz]"""
 freq_fgcd = np.gcd(freq_f1, freq_f2)
 """Greatest common divisor of frequencies f1 and f2 [GHz]"""
-# source_amp_f1 = 1000/freq_f1/20  # A
-source_amp_f1 = 0.1
+source_amp_f1 = 0.1  # A
 """Amplitude of f1 wave [Å]"""
-# source_amp_f2 = 1000/freq_f2/20  # A
-source_amp_f2 = 0.1
+source_amp_f2 = 0.03  # A
 """Amplitude of f2 wave [Å]"""
 #freq_index = 0
 non_detec_cols = int(3)
