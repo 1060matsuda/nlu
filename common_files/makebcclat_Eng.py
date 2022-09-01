@@ -227,14 +227,14 @@ def arrange_lat(R, Vac_Cu):
                             perfect[p, 5] = 0           # if Vac[p,5] ==0
                             del_num += 1
                             klist.append(p)
-                            print(len(klist)-1)
+                            #print(len(klist)-1)
                             # print(del_num)
                         if Vac_Cu == 2:
                             perfect[p, 4] = 10           # if Cu [p,4] ==10
                             del_num += 1
                             # print(del_num)
                             klist.append(p)
-                            print(len(klist)-1)
+                            #print(len(klist)-1)
         else:
             # Supposing the radius is more than 2.8A. If the cutoff is set to 2R(2*radius), then particles are scattered somewhat well. Currently virtually unused.
             #delta = 0.05
@@ -260,13 +260,13 @@ def arrange_lat(R, Vac_Cu):
                                     klist.append(v)
                                     # print(klist[del_num-1])
                                     # print(del_num)
-                                    print(len(klist)-1)
+                                    #print(len(klist)-1)
                                 if Vac_Cu == 2:
                                     perfect[v, 4] = 10  # if Cu, [v,4] ==10
                                     del_num += 1
                                     # print(del_num)
                                     klist.append(v)
-                                    print(len(klist)-1)
+                                    #print(len(klist)-1)
     print("Number of deleted/modified atoms is")
     print(del_num)
     print("point-defect-equivalent density:")
