@@ -67,7 +67,8 @@ n_arrange = (N_X_D-1) * N_Y * N_Z * 2
 
 # Set here is the density of vacancies/precipitates
 if "defects_rate" in config:
-    RATE = float(config["defects_rate"])  # vacancy density rate. If RATE = 1, material will be nothing, or whole Cu
+    # vacancy density rate. If RATE = 1, material will be nothing, or whole Cu
+    RATE = float(config["defects_rate"])
 else:
     RATE = 0.0
 print("defects_rate is:")
@@ -202,7 +203,8 @@ def center(x):
 def arrange_lat(R, Vac_Cu):
     del_num = 0
     klist = [1]  # absolutely not be void in this position
-    np.random.seed(seed=32)
+    # When seed is specified as constant, output lattice will always be the same.
+    # np.random.seed(seed=32)
     plist = np.random.randint(1, n_arrange+1, n_atoms)
     for j in range(n_atoms):  # any big value is ok
         if del_num >= n_vacancy:
@@ -216,10 +218,12 @@ def arrange_lat(R, Vac_Cu):
                or
                (perfect[p, 1] >= (N_X_D+0.5)*LAT_CONST+cut_off and perfect[p, 1] <= (N_X)*LAT_CONST-cut_off)):
                 for k in range(len(klist)):
-                    if perfect[klist[k], 5] == 0 and Vac_Cu == 1:          # if atom k is Vac, perfect[k,5] should be 0
+                    # if atom k is Vac, perfect[k,5] should be 0
+                    if perfect[klist[k], 5] == 0 and Vac_Cu == 1:
                         if neighbor(p, klist[k], R, cut_off) == 1:
                             break
-                    if perfect[klist[k], 4] == 10 and Vac_Cu == 2:          # if atom k is Cu, perfect[k,4] should be 10
+                    # if atom k is Cu, perfect[k,4] should be 10
+                    if perfect[klist[k], 4] == 10 and Vac_Cu == 2:
                         if neighbor(p, klist[k], R, cut_off) == 1:
                             break
                     if k == len(klist)-1:
@@ -227,14 +231,14 @@ def arrange_lat(R, Vac_Cu):
                             perfect[p, 5] = 0           # if Vac[p,5] ==0
                             del_num += 1
                             klist.append(p)
-                            #print(len(klist)-1)
+                            # print(len(klist)-1)
                             # print(del_num)
                         if Vac_Cu == 2:
                             perfect[p, 4] = 10           # if Cu [p,4] ==10
                             del_num += 1
                             # print(del_num)
                             klist.append(p)
-                            #print(len(klist)-1)
+                            # print(len(klist)-1)
         else:
             # Supposing the radius is more than 2.8A. If the cutoff is set to 2R(2*radius), then particles are scattered somewhat well. Currently virtually unused.
             #delta = 0.05
@@ -260,13 +264,13 @@ def arrange_lat(R, Vac_Cu):
                                     klist.append(v)
                                     # print(klist[del_num-1])
                                     # print(del_num)
-                                    #print(len(klist)-1)
+                                    # print(len(klist)-1)
                                 if Vac_Cu == 2:
                                     perfect[v, 4] = 10  # if Cu, [v,4] ==10
                                     del_num += 1
                                     # print(del_num)
                                     klist.append(v)
-                                    #print(len(klist)-1)
+                                    # print(len(klist)-1)
     print("Number of deleted/modified atoms is")
     print(del_num)
     print("point-defect-equivalent density:")
