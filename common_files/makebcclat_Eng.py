@@ -231,6 +231,7 @@ def arrange_lat(R, Vac_Cu):
                             perfect[p, 5] = 0           # if Vac[p,5] ==0
                             del_num += 1
                             klist.append(p)
+                            print("Atom "+str(p)+"has been deleted")
                             # print(len(klist)-1)
                             # print(del_num)
                         if Vac_Cu == 2:
