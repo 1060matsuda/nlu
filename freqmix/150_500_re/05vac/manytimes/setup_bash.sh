@@ -1,5 +1,5 @@
 #!/bin/bash
-
+module load python
 for i in `seq 100`
 do
 	mkdir $i
