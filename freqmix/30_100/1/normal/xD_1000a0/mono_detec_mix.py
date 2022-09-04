@@ -176,7 +176,6 @@ for i in range(detecs_num):
     window_start_timestep = int(
         zerocross_timestep_at_detecs_array[i] - 2*T_f2/timestep)
 
-
     # ここまで音速測定
 
     trimmedWave = u_detec[window_start_timestep:window_start_timestep+N_fgcd]
@@ -317,13 +316,16 @@ plt.savefig(title+".png")
 
 
 fig, ax = plt.subplots()
-ax.set_title("$a/x$")
+# ax.set_title("$a/x$")
 ax.plot(x_detecs_array[0, :], a_fsum_at_detecs /
-        x_detecs_array[0, :], marker="o", linestyle="none", label=r"$a_{sum}/x$")
+        x_detecs_array[0, :], marker="o", linestyle="none", label=r"$a_{+}/x$")
 ax.plot(x_detecs_array[0, :], a_fdif_at_detecs /
-        x_detecs_array[0, :], marker="o", linestyle="none", label=r"$a_{dif}/x$")
+        x_detecs_array[0, :], marker="o", linestyle="none", label=r"$a_{-}/x$")
 ax.legend()
-plt.savefig("x_vs_a.png")
+ax.set_xlabel(r"Detector position $x_D$ [Å]")
+ax.set_ylabel(r"$a_{\pm}/x$ [-]")
+ax.set_title(r"$a_{\pm}/x$, for 500GHz $\pm$ 150GHz")
+plt.savefig("x_vs_a.svg")
 
 
 # slope method
@@ -432,13 +434,13 @@ with open("beta.csv", mode='a') as f:
 
 fig, ax = plt.subplots()
 
-ax.plot(x_detecs_array[0, :], beta_sums_at_detecs_corrected,
+ax.plot(x_detecs_array[0, :], beta_sums_at_detecs_corrected, color="green",
         marker="o", linestyle="none", label=r"$\beta _{+}, corrected$")
-ax.plot(x_detecs_array[0, :], beta_sums_at_detecs, marker="o",
+ax.plot(x_detecs_array[0, :], beta_sums_at_detecs, marker="o", color="#1f77b4",
         linestyle="none", label=r"$\beta_{+}$, raw")
-ax.plot(x_detecs_array[0, :], beta_difs_at_detecs_corrected,
+ax.plot(x_detecs_array[0, :], beta_difs_at_detecs_corrected, color="red",
         marker="o", linestyle="none", label=r"$\beta _{-}, corrected$")
-ax.plot(x_detecs_array[0, :], beta_difs_at_detecs, marker="o",
+ax.plot(x_detecs_array[0, :], beta_difs_at_detecs, marker="o", color="#ff7f0e",
         linestyle="none", label=r"$\beta_{-}$, raw")
 """ax.plot(x_detecs_array[0, :], beta_aves_at_detecs,
         marker="o", linestyle="none", label=r"$\beta _{source},ave$")
@@ -451,13 +453,42 @@ ax.axhline(y=beta_slope_dif, linestyle=":",
 ax.axhline(y=beta_slope_ave, linestyle="dashdot",
            label=r"$\beta _{slope}$,ave")"""
 # ax.set_xlim([400,699])
-#ax.set_ylim([2.4, 3.])
+#ax.set_ylim([2.4, 3.1])
 ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
 ax.set_xlabel(r"Detector position $x_D$ [Å]")
 ax.set_ylabel(r"Nonlinearity parameter $\beta$ [-]")
-ax.set_title(r"100GHz $\pm$ 30GHz")
+ax.set_title(r"$\beta$, for 100GHz $\pm$ 130GHz")
+#plt.rcParams["svg.fonttype"] = "none"
 plt.savefig("betas_vs_x.svg", bbox_inches="tight")
 
+# %%
+fig, ax = plt.subplots()
+
+ax.plot(x_detecs_array[0, :], beta_sums_at_detecs, marker="o",
+        linestyle="none", label=r"$\beta_{+}$, raw")
+ax.plot(x_detecs_array[0, :], beta_difs_at_detecs, marker="o",
+        linestyle="none", label=r"$\beta_{-}$, raw")
+
+ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
+ax.set_xlabel(r"Detector position $x_D$ [Å]")
+ax.set_ylabel(r"Nonlinearity parameter $\beta$ [-]")
+ax.set_title(r"$\beta$, for 100GHz $\pm$ 30GHz")
+#ax.set_ylim([2.4, 3.1])
+plt.savefig("betas_vs_x_raw.svg", bbox_inches="tight")
+
+fig, ax = plt.subplots()
+
+ax.plot(x_detecs_array[0, :], beta_sums_at_detecs_corrected, marker="o",
+        linestyle="none", label=r"$\beta_{+}$, corrected")
+ax.plot(x_detecs_array[0, :], beta_difs_at_detecs_corrected, marker="o",
+        linestyle="none", label=r"$\beta_{-}$, corrected")
+
+ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
+ax.set_xlabel(r"Detector position $x_D$ [Å]")
+ax.set_ylabel(r"Nonlinearity parameter $\beta$ [-]")
+ax.set_title(r"$\beta$, for 100GHz $\pm$ 30GHz")
+#ax.set_ylim([2.4, 3.1])
+plt.savefig("betas_vs_x_corr.svg", bbox_inches="tight")
 
 # %%
 i = int(-1)
