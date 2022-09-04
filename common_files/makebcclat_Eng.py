@@ -26,15 +26,16 @@ num = 20  # determins the size of the plane 100
 N_Y = num
 N_Z = num
 
-
+frequency_high = float(config["f1"])
 frequency_low = float(config["f2"])  # GHz
 """[GHz]"""
 cycles = 6
 """Specify how many cycles of low-frequency-wave you want to input."""
 
 # detector location
-N_X_D = 201
-
+N_X_D = int(100000/frequency_high + 1)
+print("N_X_D")
+print(N_X_D)
 N_BUF = math.ceil(N_X_D + 12000*cycles/frequency_low)
 
 # The cell length including the buffer layer
