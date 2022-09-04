@@ -1,6 +1,6 @@
-f1: xxx #GHz
-f2: xxx #GHz
+f1: 500 #GHz
+f2: 150 #GHz
 timestep: 0.0005 #ps
 #zerocross_start_rate: 0.95
-#defects_rate: 0.005
-#defects_radius: 1 #A
+defects_rate: 0.01
+defects_radius: 0 #A
