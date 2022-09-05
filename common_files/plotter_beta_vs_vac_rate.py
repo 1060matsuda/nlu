@@ -45,7 +45,10 @@ for dir_name in dirs:
 print("plotting...")
 fig, ax = plt.subplots()
 ax.errorbar(rates_array, betas_array, yerr=errs_array,
-            linestyle="none", marker="o", capsize=3)
+            linestyle="none", marker="o", capsize=3, markersize=10)
+morisan_x = [0,1]
+morisan_y = [2.5467, 2.408]
+ax.plot(morisan_x, morisan_y,  linestyle="none", marker="v", color="red", markersize=10)
 ax.set_xlabel(r"Density [%]")
 ax.set_ylabel(r"Nonlinearity parameter $\beta$")
 ax.set_title(r"Vacancy density VS $\beta$")

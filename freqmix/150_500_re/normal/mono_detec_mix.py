@@ -454,12 +454,13 @@ ax.axhline(y=beta_slope_ave, linestyle="dashdot",
            label=r"$\beta _{slope}$,ave")"""
 # ax.set_xlim([400,699])
 ax.set_ylim([2.4, 3.1])
+ax.set_xlim([200, 600])
 ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
 ax.set_xlabel(r"Detector position $x_D$ [Å]")
 ax.set_ylabel(r"Nonlinearity parameter $\beta$ [-]")
 ax.set_title(r"$\beta$, for 500GHz $\pm$ 150GHz")
 #plt.rcParams["svg.fonttype"] = "none"
-plt.savefig("betas_vs_x.svg", bbox_inches="tight")
+plt.savefig("betas_vs_x_xlim.svg", bbox_inches="tight")
 
 # %%
 fig, ax = plt.subplots()
@@ -487,8 +488,9 @@ ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
 ax.set_xlabel(r"Detector position $x_D$ [Å]")
 ax.set_ylabel(r"Nonlinearity parameter $\beta$ [-]")
 ax.set_title(r"$\beta$, for 500GHz $\pm$ 150GHz")
-ax.set_ylim([2.4, 3.1])
-plt.savefig("betas_vs_x_corr.svg", bbox_inches="tight")
+ax.set_ylim([2.2, 3.3])
+ax.set_xlim([200, 600])
+plt.savefig("betas_vs_x_corr_xlim.svg", bbox_inches="tight")
 
 # %%
 i = int(-1)
