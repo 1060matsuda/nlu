@@ -490,6 +490,14 @@ ax.set_title(r"$\beta$, for 500GHz $\pm$ 150GHz")
 ax.set_ylim([2.4, 3.1])
 plt.savefig("betas_vs_x_corr.svg", bbox_inches="tight")
 
+ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
+ax.set_xlabel(r"Detector position $x_D$ [Å]")
+ax.set_ylabel(r"Nonlinearity parameter $\beta$ [-]")
+ax.set_title(r"$\beta$, for 500GHz $\pm$ 150GHz")
+ax.set_ylim([2.4, 3.1])
+ax.set_xlim([200, 600])
+plt.savefig("betas_vs_x_corr_xlim.svg", bbox_inches="tight")
+
 # %%
 i = int(-1)
 # ゼロクロス法の音速測定
