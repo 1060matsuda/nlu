@@ -1,9 +1,0 @@
-LAMMPS (29 Sep 2021 - Update 1)
-KOKKOS mode is enabled (../kokkos.cpp:97)
-  will use up to 4 GPU(s) per node
-  using 1 OpenMP thread(s) per MPI task
-Reading data file ...
-  orthogonal box = (0.0000000 0.0000000 0.0000000) to (4143.0751 57.106480 57.106480)
-  128 by 1 by 1 MPI processor grid
-  reading atoms ...
-slurmstepd: error: *** JOB 6463756 ON r231n05 CANCELLED AT 2022-04-27T01:26:20 ***

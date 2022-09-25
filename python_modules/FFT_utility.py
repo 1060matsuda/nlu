@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import csv
 from scipy import signal
 
+
 def getDownwardZeroCrossIndex(vector1d):
     """searches for the first zerocross point (+ -> -) 
     from the leftend of the waveform."""
@@ -29,13 +30,14 @@ def getDownwardZeroCrossIndex(vector1d):
                 # print(searchIndex)
                 return searchIndex
 
+
 def getUpwardZeroCrossIndex(vector1d):
     """searches for the first zerocross
     point (+ -> -) from the leftend of the waveform."""
     upCount = 0
     searchIndex = 1
     while True:
-        upCount=0
+        upCount = 0
         searchIndex = searchIndex + 1
         if vector1d[searchIndex] > 0 and vector1d[searchIndex-1] < 0:
             for i in range(10):
@@ -47,15 +49,16 @@ def getUpwardZeroCrossIndex(vector1d):
                 # print(searchIndex)
                 return searchIndex
 
+
 def getDownwardZeroCrossIndexFromArbitraryPoint(vector1d, startIndex):
     """Searches for an downward zerocross point 
-    from the specified index of the vector."""    
+    from the specified index of the vector."""
     downCount = 0
     searchIndex = startIndex
     while True:
         searchIndex = searchIndex + 1
         if vector1d[searchIndex] < 0 and vector1d[searchIndex-1] > 0:
-            downCount=0
+            downCount = 0
             for i in range(10):
                 if vector1d[searchIndex-5+i] < vector1d[searchIndex-5+i+1]:
                     downCount = 0
@@ -104,20 +107,28 @@ def loadCsvOutput(csvData):
     return ndarrayData
 
 # Withdraws the time series of the detector's x coorinate
+
+
 def getDetector(array):
     return array[:, 2]
 
 # Withdraws the time series of the source's x coorinate
+
+
 def getSource(array):
     return array[:, 1]
 
 # trims the wave within the specified range
+
+
 def trim(wave, trimStartIndex, trimRange):
     """trims the wave from the specified index, for the specified range"""
     trimmedArray = wave[trimStartIndex:trimStartIndex+trimRange]
     return trimmedArray
 
 # trims the wave within the specified range and then offsets the wave so that the normal position can be x=0.
+
+
 def trimAndOffset(wave, trimStartIndex, trimRange):
     """trims the wave within the specified range and then 
     offsets the wave so that the normal position can be x=0."""
@@ -126,6 +137,8 @@ def trimAndOffset(wave, trimStartIndex, trimRange):
     return offsettedArray
 
 # performs fft. output[0] = power, output[1] = freq. both output are recognized as complex.
+
+
 def fftWithWindow(FFTData, dtps, hannORhamming: str = "hann"):
     """Performs fft. Output[0] = power, output[1] = freq. 
     Both outputs are recognized as complex number.
@@ -145,6 +158,7 @@ def fftWithWindow(FFTData, dtps, hannORhamming: str = "hann"):
     FFT_power = np.fft.fft(waveToTransform, n=None, norm=None)
     FFT_freq = np.fft.fftfreq(dataPoints, d=dtps*(10**-12))
     return np.stack([FFT_power, FFT_freq])
+
 
 def window(data, hannORhamming: str = "hann"):
     dataPoints = len(data)
@@ -167,6 +181,8 @@ def FFTonly(data, dtps):
     return np.stack([FFT_power, FFT_freq])
 
 # calculates beta.
+
+
 def getBetaSHG(a_f, a_2f, lambda_f, x_detec):
     """Calculates beta with SHG method. 
     Requires a_f, a_2f, lambda_f, x_D (distance between the source and the detector)."""
@@ -174,6 +190,8 @@ def getBetaSHG(a_f, a_2f, lambda_f, x_detec):
     return beta
 
 # attaches zeros to the raw wave data.
+
+
 def zeroPadding(data):
     """Attaches zeros to the raw wave data."""
     zeros = np.zeros(len(data))
@@ -215,10 +233,52 @@ def getIndexUpToSixthHarmonic(data, fundamental_frequency):
 
 
 def getBetaFreqMix(aSum, aDif, aF1, aF2, freq1, freq2, DeltaX, vel):
-    """Calculates beta with freqmix method."""
+    """Calculates beta with freqmix method. length:m, freq:Hz, time:s"""
     aMix = (aSum+aDif)/2
     Lambda1 = vel/freq1
     Lambda2 = vel/freq2
     K1 = 2*math.pi/Lambda1
     K2 = 2*math.pi/Lambda2
-    return np.array([4*aDif/DeltaX/aF1/aF2/K1/K2, 4*aSum/DeltaX/aF1/aF2/K1/K2, 4*aMix/DeltaX/aF1/aF2/K1/K2])
+    return np.array([4*aSum/DeltaX/aF1/aF2/K1/K2, 4*aDif/DeltaX/aF1/aF2/K1/K2, 4*aMix/DeltaX/aF1/aF2/K1/K2])
+
+
+def wave_arrival_zerocross(u_at_x, dx_wavesource_and_x, v_temp, timestep, T, rate=3/4):
+    """Returns the velocity calculated with zerocross method at x=x.
+    Note that this method searches the UPWARD zerocross point. 
+    You need to input displacement timeseries at x[A], 
+    distance between the wavesource and x[A],
+    temporary velocity (e.g. expt value)[m/s],
+    timestep [ps/step], and the wave cycle T [ps].
+    If you specify the rate, the zerocross search will start at the timestep
+    where the elapsed time is rate*waveperiod since the wave arrived at the detector.
+    """
+    dt_wavesource_and_x = dx_wavesource_and_x*100/v_temp  # ps = A*100/(pm/ps)
+    search_start_timestep = int(dt_wavesource_and_x/timestep+rate*T/timestep)
+    zerocross_timestep = getUpwardZeroCrossIndexFromArbitraryPoint(
+        u_at_x, search_start_timestep)
+    arrival_timestep = int(zerocross_timestep - T/timestep)
+    # v = dx [A] / (arrival_timestep[step]*timestep[ps/step])
+    #   = dx/(arrival_timestep*timestep) [A/ps= 10^-10m/10^-12s = 100m/s]
+    #   = dx/(arrival_timestep*timestep)*100 [m/s]
+    velocity = dx_wavesource_and_x/(arrival_timestep*timestep)*100
+    return zerocross_timestep, arrival_timestep, velocity
+
+def wave_arrival_zerocross_inv(u_at_x, dx_wavesource_and_x, v_temp, timestep, T, rate=3/4):
+    """Returns the velocity calculated with zerocross method at x=x.
+    You need to input displacement timeseries at x[A], 
+    distance between the wavesource and x[A],
+    temporary velocity (e.g. expt value)[m/s],
+    timestep [ps/step], and the wave cycle T [ps].
+    If you specify the rate, the zerocross search will start at the timestep
+    where the elapsed time is rate*waveperiod since the wave arrived at the detector.
+    """
+    dt_wavesource_and_x = dx_wavesource_and_x*100/v_temp  # ps = A*100/(pm/ps)
+    search_start_timestep = int(dt_wavesource_and_x/timestep+rate*T/timestep)
+    zerocross_timestep = getDownwardZeroCrossIndexFromArbitraryPoint(
+        u_at_x, search_start_timestep)
+    arrival_timestep = int(zerocross_timestep - T/timestep)
+    # v = dx [A] / (arrival_timestep[step]*timestep[ps/step])
+    #   = dx/(arrival_timestep*timestep) [A/ps= 10^-10m/10^-12s = 100m/s]
+    #   = dx/(arrival_timestep*timestep)*100 [m/s]
+    velocity = dx_wavesource_and_x/(arrival_timestep*timestep)*100
+    return zerocross_timestep, arrival_timestep, velocity

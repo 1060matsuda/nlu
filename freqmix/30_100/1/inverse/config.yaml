@@ -1,0 +1,3 @@
+f1: 100 #GHz
+f2: 30 #GHz
+timestep: 0.0005 #ps
