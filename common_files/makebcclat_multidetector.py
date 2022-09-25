@@ -1,8 +1,10 @@
+# %%
 # -*- coding:utf-8 -*-
 import sys
 import math
 import numpy as np
 import random
+import yaml
 
 # lattice constant a0 and strain settings
 LAT_CONST = 2.855324  # A
@@ -15,18 +17,25 @@ DIST_X = LAT_CONST
 DIST_Y = LAT_CONST
 DIST_Z = LAT_CONST
 
+with open("config.yaml", "r") as yml:
+    config = yaml.safe_load(yml)
+
 # the size of the whole simulation cell
 # N_Y and N_Z represents the length of the cell (unit: lattice constant)
 num = 20  # determins the size of the plane 100
 N_Y = num
 N_Z = num
 
-frequency_low = 30  # GHz
-cycles = 6
+frequency_high = float(config["f1"])
+frequency_low = float(config["f2"])  # GHz
+"""[GHz]"""
+cycles = int(config["cycles_low"])
+"""Specify how many cycles of low-frequency-wave you want to input."""
 
 # detector location
-N_X_D = 201
-
+N_X_D = int(100000/frequency_high + 1)
+print("N_X_D")
+print(N_X_D)
 N_BUF = math.ceil(N_X_D + 12000*cycles/frequency_low)
 
 # The cell length including the buffer layer
@@ -40,24 +49,33 @@ N_X = int(N_BUF*2/3)
 # Currently not used; N_BIG-N_BUF=0 is required.
 N_BIG = N_BUF
 
-detecsNum = int(30)
-XDArray = np.zeros(detecsNum)
-XD_interval = math.ceil(N_X_D/(detecsNum-1))
+num_of_detecs = int(30)
+XDArray = np.zeros(num_of_detecs)
+XD_interval = math.ceil(N_X_D/(num_of_detecs-1))
 
 #N_X_D0 =int(N_X*(1-2**(-0)))
-for i in range(detecsNum):
+for i in range(num_of_detecs):
     XDArray[i] = int(XD_interval*i)
 
 
 # The whole number of atoms in the simulation setup
 #n_atoms = N_X * N_Y *N_Z * 2
 n_atoms = N_BIG * N_Y * N_Z * 2
-
+print("n_atoms")
+print(n_atoms)
 # the number of atoms in the region where defects are introduced
 n_arrange = (N_X_D-1) * N_Y * N_Z * 2
 
 # Set here is the density of vacancies/precipitates
-RATE = 0.000  # vacancy density rate. If RATE = 1, material will be nothing, or whole Cu
+if "defects_rate" in config:
+    # vacancy density rate. If RATE = 1, material will be nothing, or whole Cu
+    RATE = float(config["defects_rate"])
+else:
+    RATE = 0.0
+print("defects_rate is:")
+print(RATE)
+
+# %%
 # Floor function. If n_arrange*RATE == 52.6, then it retuns 52
 n_vacancy = math.floor(n_arrange * RATE)
 cut_off = 5.6
@@ -97,7 +115,17 @@ perfect = np.zeros((n_atoms, 8))
 
 
 def make_perfect():
-
+    """the function below creates the list of atoms in perfect crystal.
+    Each atom has the list of:
+    atom ID, coordinates in order of x, y, z, groupID, absent(0)/present(1) binary, distance over the cyclic boundaries.
+    Group IDs reference:
+    1:Most of the atoms located at the left of the detector. These can be modified into porecipitates or vacancies
+    2:atoms at the source
+    3:atoms at the detector
+    4:Most of the atoms located at the right of the detector. These can't be modified
+    5:atoms at the right end of the simulation box (called "edge"). It depends on the crystalline structure whether to denote 5 or 6. In this program only 6 is used.
+    7,8,9:atoms in the region of the right side of the edge (=buffer layer).It depends on the crystalline structure whether to denote 7, 8, or 9. In this program, three numbers are treated equally.
+    detailed information (I didn't understand well though) about 9 and 10 is described in the original makebcclat.py."""
     count = 0
     # make perfect lattice
     for ix in range(N_BIG):
@@ -169,9 +197,13 @@ def center(x):
 def arrange_lat(R, Vac_Cu):
     del_num = 0
     klist = [1]  # absolutely not be void in this position
-    np.random.seed(seed=32)
+    # When seed is specified as constant, output lattice will always be the same.
+    # np.random.seed(seed=32)
     plist = np.random.randint(1, n_arrange+1, n_atoms)
     for j in range(n_atoms):  # any big value is ok
+        if del_num < n_vacancy:
+            print("ERROR: RATE should be 0")
+            sys.exit()
         if del_num >= n_vacancy:
             break
         #p = random.randint(1,n_arrange+1)
@@ -179,14 +211,16 @@ def arrange_lat(R, Vac_Cu):
         if R == 0:
             # Note that, currently, the latter condition means nothing.
             if perfect[p, 4] == 1 and \
-               ((perfect[p, 1] >= (indent+0.5)*LAT_CONST+cut_off and perfect[p, 1] <= (N_X_D+indent)*LAT_CONST-cut_off)
+               ((perfect[p, 1] >= (0.5)*LAT_CONST+cut_off and perfect[p, 1] <= (N_X_D)*LAT_CONST-cut_off)
                or
-               (perfect[p, 1] >= (N_X_D+0.5+indent)*LAT_CONST+cut_off and perfect[p, 1] <= (N_X+indent)*LAT_CONST-cut_off)):
+               (perfect[p, 1] >= (N_X_D+0.5)*LAT_CONST+cut_off and perfect[p, 1] <= (N_X)*LAT_CONST-cut_off)):
                 for k in range(len(klist)):
-                    if perfect[klist[k], 5] == 0 and Vac_Cu == 1:          # if Vac [k,5] ==0
+                    # if atom k is Vac, perfect[k,5] should be 0
+                    if perfect[klist[k], 5] == 0 and Vac_Cu == 1:
                         if neighbor(p, klist[k], R, cut_off) == 1:
                             break
-                    if perfect[klist[k], 4] == 10 and Vac_Cu == 2:          # if Cu [k,4] ==10
+                    # if atom k is Cu, perfect[k,4] should be 10
+                    if perfect[klist[k], 4] == 10 and Vac_Cu == 2:
                         if neighbor(p, klist[k], R, cut_off) == 1:
                             break
                     if k == len(klist)-1:
@@ -194,47 +228,51 @@ def arrange_lat(R, Vac_Cu):
                             perfect[p, 5] = 0           # if Vac[p,5] ==0
                             del_num += 1
                             klist.append(p)
-                            print(len(klist)-1)
+                            print("Atom "+str(p)+"has been deleted")
+                            # print(len(klist)-1)
                             # print(del_num)
                         if Vac_Cu == 2:
                             perfect[p, 4] = 10           # if Cu [p,4] ==10
                             del_num += 1
                             # print(del_num)
                             klist.append(p)
-                            print(len(klist)-1)
+                            # print(len(klist)-1)
         else:
-            # SUpposing the radius is more than 2.8A. If the cutoff is set to 2R(2*radius), then particles are scattered somewhat well. Currently virtually unused.
+            # Supposing the radius is more than 2.8A. If the cutoff is set to 2R(2*radius), then particles are scattered somewhat well. Currently virtually unused.
             #delta = 0.05
             #delta = 0.5
             # if perfect[p,4] ==1 and perfect[p,1] >= (N_X_D*(0.5-delta)+indent)*LAT_CONST+R+cut_off and perfect[p,1] <= (N_X_D*(0.5+delta)+indent)*LAT_CONST-(R+cut_off):]
             if perfect[p, 4] == 1 and \
-               ((perfect[p, 1] >= (indent+0.5)*LAT_CONST+cut_off+R and perfect[p, 1] <= (N_X_D+indent)*LAT_CONST-cut_off-R)
+               ((perfect[p, 1] >= (0.5)*LAT_CONST+cut_off+R and perfect[p, 1] <= (N_X_D)*LAT_CONST-cut_off-R)
                or
-               (perfect[p, 1] >= (N_X_D+0.5+indent)*LAT_CONST+cut_off+R and perfect[p, 1] <= (N_X+indent)*LAT_CONST-cut_off-R)):
+               (perfect[p, 1] >= (N_X_D+0.5)*LAT_CONST+cut_off+R and perfect[p, 1] <= (N_X)*LAT_CONST-cut_off-R)):
                 for k in range(len(klist)):
-                    if perfect[klist[k], 5] == 0 and Vac_Cu == 1:          # if Vac [k,5] ==0
+                    if perfect[klist[k], 5] == 0 and Vac_Cu == 1:          # if Vac, then [k,5] ==0
                         if neighbor(p, klist[k], R, 2*R) == 1:
                             break
-                    if perfect[klist[k], 4] == 10 and Vac_Cu == 2:          # if Cu [k,4] ==10
+                    if perfect[klist[k], 4] == 10 and Vac_Cu == 2:          # if Cu, then [k,4] ==10
                         if neighbor(p, klist[k], R, 2*R) == 1:
                             break
                     if k == len(klist)-1:
                         for v in range(n_arrange):
                             if neighbor(p, v, R, 0) == 1:
                                 if Vac_Cu == 1:
-                                    perfect[v, 5] = 0  # if Vac [v,5] ==0
+                                    perfect[v, 5] = 0  # if Vac, [v,5] ==0
                                     del_num += 1
                                     klist.append(v)
                                     # print(klist[del_num-1])
                                     # print(del_num)
-                                    print(len(klist)-1)
+                                    # print(len(klist)-1)
                                 if Vac_Cu == 2:
-                                    perfect[v, 4] = 10  # if Cu [v,4] ==10
+                                    perfect[v, 4] = 10  # if Cu, [v,4] ==10
                                     del_num += 1
                                     # print(del_num)
                                     klist.append(v)
-                                    print(len(klist)-1)
-
+                                    # print(len(klist)-1)
+    print("Number of deleted/modified atoms is")
+    print(del_num)
+    print("point-defect-equivalent density:")
+    print(del_num/n_arrange)
     name(33)
 
 # create Fe.lat
@@ -366,10 +404,12 @@ def distance(p, k, a):
 
 
 # mainpart
+defect_radius = float(config["defects_radius"])
+
 if __name__ == "__main__":
     argvs = sys.argv
     make_perfect()
-    arrange_lat(0, 1)  # (R ,type) type= vacancy:1 , Cu: 2
+    arrange_lat(defect_radius, 1)  # (R ,type) type= vacancy:1 , Cu: 2
 
     # input_empty()
     # and RATE or num (=N_X,N_Y)are all parameters

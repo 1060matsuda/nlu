@@ -131,62 +131,55 @@ def make_perfect():
     for ix in range(N_BIG):
         for iy in range(N_Y):
             for iz in range(N_Z):
-                if ix == 0:
-                    perfect[count] = [count+1, vert[0]+ix*LAT_CONST, vert[1]+iy*LAT_CONST, vert[2] +
-                                      iz*LAT_CONST, 2, 1, vert[1]+(iy-N_Y)*LAT_CONST, vert[2]+(iz-N_Z)*LAT_CONST]
+                if True:
+                    # if ix==indent+1:
+                    perfect[count] = [count+1, vert[0]+ix*LAT_CONST, vert[1]+iy*LAT_CONST, vert[2]+iz *
+                                      LAT_CONST, len(XDArray)+2, 1, vert[1]+(iy-N_Y)*LAT_CONST, vert[2]+(iz-N_Z)*LAT_CONST]
                     count += 1
-                    perfect[count] = [count+1, surf1[0]+ix*LAT_CONST, surf1[1]+iy*LAT_CONST, surf1[2] +
-                                      iz*LAT_CONST, 2, 1, surf1[1]+(iy-N_Y)*LAT_CONST, surf1[2]+(iz-N_Z)*LAT_CONST]
+                    perfect[count] = [count+1, surf1[0]+ix*LAT_CONST, surf1[1]+iy*LAT_CONST, surf1[2]+iz *
+                                      LAT_CONST, len(XDArray)+2, 1, surf1[1]+(iy-N_Y)*LAT_CONST, surf1[2]+(iz-N_Z)*LAT_CONST]
                     count += 1
-                elif ix < N_X_D:
-                    perfect[count] = [count+1, vert[0]+ix*LAT_CONST, vert[1]+iy*LAT_CONST, vert[2] +
-                                      iz*LAT_CONST, 1, 1, vert[1]+(iy-N_Y)*LAT_CONST, vert[2]+(iz-N_Z)*LAT_CONST]
-                    count += 1
-                    perfect[count] = [count+1, surf1[0]+ix*LAT_CONST, surf1[1]+iy*LAT_CONST, surf1[2] +
-                                      iz*LAT_CONST, 1, 1, surf1[1]+(iy-N_Y)*LAT_CONST, surf1[2]+(iz-N_Z)*LAT_CONST]
-                    count += 1
-                elif ix == N_X_D:
-                    perfect[count] = [count+1, vert[0]+ix*LAT_CONST, vert[1]+iy*LAT_CONST, vert[2] +
-                                      iz*LAT_CONST, 3, 1, vert[1]+(iy-N_Y)*LAT_CONST, vert[2]+(iz-N_Z)*LAT_CONST]
-                    count += 1
-                    perfect[count] = [count+1, surf1[0]+ix*LAT_CONST, surf1[1]+iy*LAT_CONST, surf1[2] +
-                                      iz*LAT_CONST, 3, 1, surf1[1]+(iy-N_Y)*LAT_CONST, surf1[2]+(iz-N_Z)*LAT_CONST]
-                    count += 1
-                elif ix < N_X:
-                    perfect[count] = [count+1, vert[0]+ix*LAT_CONST, vert[1]+iy*LAT_CONST, vert[2] +
-                                      iz*LAT_CONST, 4, 1, vert[1]+(iy-N_Y)*LAT_CONST, vert[2]+(iz-N_Z)*LAT_CONST]
-                    count += 1
-                    perfect[count] = [count+1, surf1[0]+ix*LAT_CONST, surf1[1]+iy*LAT_CONST, surf1[2] +
-                                      iz*LAT_CONST, 4, 1, surf1[1]+(iy-N_Y)*LAT_CONST, surf1[2]+(iz-N_Z)*LAT_CONST]
-                    count += 1
-                elif ix == N_X:
-                    perfect[count] = [count+1, vert[0]+ix*LAT_CONST, vert[1]+iy*LAT_CONST, vert[2] +
-                                      iz*LAT_CONST, 5, 1, vert[1]+(iy-N_Y)*LAT_CONST, vert[2]+(iz-N_Z)*LAT_CONST]
-                    count += 1
-                    perfect[count] = [count+1, surf1[0]+ix*LAT_CONST, surf1[1]+iy*LAT_CONST, surf1[2] +
-                                      iz*LAT_CONST, 6, 1, surf1[1]+(iy-N_Y)*LAT_CONST, surf1[2]+(iz-N_Z)*LAT_CONST]
-                    count += 1
-                elif ix == N_X+1:
-                    perfect[count] = [count+1, vert[0]+ix*LAT_CONST, vert[1]+iy*LAT_CONST, vert[2] +
-                                      iz*LAT_CONST, 7, 1, vert[1]+(iy-N_Y)*LAT_CONST, vert[2]+(iz-N_Z)*LAT_CONST]
-                    count += 1
-                    perfect[count] = [count+1, surf1[0]+ix*LAT_CONST, surf1[1]+iy*LAT_CONST, surf1[2] +
-                                      iz*LAT_CONST, 8, 1, surf1[1]+(iy-N_Y)*LAT_CONST, surf1[2]+(iz-N_Z)*LAT_CONST]
-                    count += 1
-                elif ix <= N_BUF:
-                    perfect[count] = [count+1, vert[0]+ix*LAT_CONST, vert[1]+iy*LAT_CONST, vert[2] +
-                                      iz*LAT_CONST, 9, 1, vert[1]+(iy-N_Y)*LAT_CONST, vert[2]+(iz-N_Z)*LAT_CONST]
-                    count += 1
-                    perfect[count] = [count+1, surf1[0]+ix*LAT_CONST, surf1[1]+iy*LAT_CONST, surf1[2] +
-                                      iz*LAT_CONST, 9, 1, surf1[1]+(iy-N_Y)*LAT_CONST, surf1[2]+(iz-N_Z)*LAT_CONST]
-                    count += 1
-                else:
-                    perfect[count] = [count+1, vert[0]+ix*LAT_CONST, vert[1]+iy*LAT_CONST, vert[2] +
-                                      iz*LAT_CONST, 10, 1, vert[1]+(iy-N_Y)*LAT_CONST, vert[2]+(iz-N_Z)*LAT_CONST]
-                    count += 1
-                    perfect[count] = [count+1, surf1[0]+ix*LAT_CONST, surf1[1]+iy*LAT_CONST, surf1[2] +
-                                      iz*LAT_CONST, 10, 1, surf1[1]+(iy-N_Y)*LAT_CONST, surf1[2]+(iz-N_Z)*LAT_CONST]
-                    count += 1
+                for arrayNum in range(len(XDArray)):
+                    if int(ix) == XDArray[arrayNum]:
+                        perfect[count-2][4] = arrayNum+1
+                        perfect[count-1][4] = arrayNum+1
+                if int(ix) == N_BIG - 1:
+                    perfect[count-2][4] = 31
+                    perfect[count-1][4] = 31
+
+
+"""                
+                if ix == N_X_D3:
+                    perfect[count] = [count+1 ,vert[0]+ix*LAT_CONST ,vert[1]+iy*LAT_CONST ,vert[2]+iz*LAT_CONST ,12 , 1,vert[1]+(iy-N_Y)*LAT_CONST,vert[2]+(iz-N_Z)*LAT_CONST]
+                    count +=  1
+                    perfect[count] = [count+1 ,surf1[0]+ix*LAT_CONST ,surf1[1]+iy*LAT_CONST ,surf1[2]+iz*LAT_CONST ,12 , 1,surf1[1]+(iy-N_Y)*LAT_CONST,surf1[2]+(iz-N_Z)*LAT_CONST]
+                    count +=  1
+                if ix == N_X_D4:
+                    perfect[count] = [count+1 ,vert[0]+ix*LAT_CONST ,vert[1]+iy*LAT_CONST ,vert[2]+iz*LAT_CONST ,13 , 1,vert[1]+(iy-N_Y)*LAT_CONST,vert[2]+(iz-N_Z)*LAT_CONST]
+                    count +=  1
+                    perfect[count] = [count+1 ,surf1[0]+ix*LAT_CONST ,surf1[1]+iy*LAT_CONST ,surf1[2]+iz*LAT_CONST ,13 , 1,surf1[1]+(iy-N_Y)*LAT_CONST,surf1[2]+(iz-N_Z)*LAT_CONST]
+                    count +=  1
+                if ix == N_X_D5:
+                    perfect[count] = [count+1 ,vert[0]+ix*LAT_CONST ,vert[1]+iy*LAT_CONST ,vert[2]+iz*LAT_CONST ,14 , 1,vert[1]+(iy-N_Y)*LAT_CONST,vert[2]+(iz-N_Z)*LAT_CONST]
+                    count +=  1
+                    perfect[count] = [count+1 ,surf1[0]+ix*LAT_CONST ,surf1[1]+iy*LAT_CONST ,surf1[2]+iz*LAT_CONST ,14 , 1,surf1[1]+(iy-N_Y)*LAT_CONST,surf1[2]+(iz-N_Z)*LAT_CONST]
+                    count +=  1
+                if ix == N_X_D6:
+                    perfect[count] = [count+1 ,vert[0]+ix*LAT_CONST ,vert[1]+iy*LAT_CONST ,vert[2]+iz*LAT_CONST ,15 , 1,vert[1]+(iy-N_Y)*LAT_CONST,vert[2]+(iz-N_Z)*LAT_CONST]
+                    count +=  1
+                    perfect[count] = [count+1 ,surf1[0]+ix*LAT_CONST ,surf1[1]+iy*LAT_CONST ,surf1[2]+iz*LAT_CONST ,15 , 1,surf1[1]+(iy-N_Y)*LAT_CONST,surf1[2]+(iz-N_Z)*LAT_CONST]
+                    count +=  1
+                if ix == N_X_D7:
+                    perfect[count] = [count+1 ,vert[0]+ix*LAT_CONST ,vert[1]+iy*LAT_CONST ,vert[2]+iz*LAT_CONST ,16 , 1,vert[1]+(iy-N_Y)*LAT_CONST,vert[2]+(iz-N_Z)*LAT_CONST]
+                    count +=  1
+                    perfect[count] = [count+1 ,surf1[0]+ix*LAT_CONST ,surf1[1]+iy*LAT_CONST ,surf1[2]+iz*LAT_CONST ,16 , 1,surf1[1]+(iy-N_Y)*LAT_CONST,surf1[2]+(iz-N_Z)*LAT_CONST]
+                    count +=  1
+                if ix == N_X_D8:
+                    perfect[count] = [count+1 ,vert[0]+ix*LAT_CONST ,vert[1]+iy*LAT_CONST ,vert[2]+iz*LAT_CONST ,17 , 1,vert[1]+(iy-N_Y)*LAT_CONST,vert[2]+(iz-N_Z)*LAT_CONST]
+                    count +=  1
+                    perfect[count] = [count+1 ,surf1[0]+ix*LAT_CONST ,surf1[1]+iy*LAT_CONST ,surf1[2]+iz*LAT_CONST ,17 , 1,surf1[1]+(iy-N_Y)*LAT_CONST,surf1[2]+(iz-N_Z)*LAT_CONST]
+                    count +=  1
+"""
 
 
 def center(x):
@@ -208,6 +201,9 @@ def arrange_lat(R, Vac_Cu):
     # np.random.seed(seed=32)
     plist = np.random.randint(1, n_arrange+1, n_atoms)
     for j in range(n_atoms):  # any big value is ok
+        if del_num < n_vacancy:
+            print("ERROR: RATE should be 0")
+            sys.exit()
         if del_num >= n_vacancy:
             break
         #p = random.randint(1,n_arrange+1)
@@ -277,7 +273,7 @@ def arrange_lat(R, Vac_Cu):
     print(del_num)
     print("point-defect-equivalent density:")
     print(del_num/n_arrange)
-    name(Vac_Cu+8)
+    name(33)
 
 # create Fe.lat
 
