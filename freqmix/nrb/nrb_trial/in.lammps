@@ -172,6 +172,7 @@ fix 1 all nve
 
 ############################################################
 variable current_time equal time
+variable w equal $g
 #variable A equal 0.1
 #variable T equal 2.0
 #variable A equal 10.0
@@ -181,7 +182,7 @@ variable current_time equal time
 ##振幅、周期を定める。
 variable f1 equal F1_REPLACE_YAML #GHz
 variable f2 equal F2_REPLACE_YAML
-variable T1 equal 1000/${f1}
+variable T1 equal 1000/${f1} #ps
 variable T2 equal 1000/${f2}
 variable A1 equal ${T1}/20
 variable B1 equal -1*${A1}
@@ -236,7 +237,7 @@ fix 2 source move variable v_myx NULL NULL v_myv NULL NULL
 
 #loop
 label run_varts
-run 100
+run 500
 #velocity buffer set 0.0 0.0 0.0
 #displace_atoms buffer move 0.0 0.0 0.0
 ##########variable j equal xcm(edge_buf,x)
@@ -268,16 +269,23 @@ variable q equal "v_g-v_w"
 displace_atoms buffer move v_q 0.0 0.0
 
 #3.5周期分の波を導入している。導入する波の周波数に合わせて変更する必要がある。
-if "${current_time}<$Q" then "jump SELF run_varts" &
+variable O equal $Q+${xd}/${wavevel}*100
+if "${current_time}<$O" then "jump SELF run_varts" &
 else "jump SELF loopBreak"
-
 label loopBreak
-unfix 2
-variable xd equal 3000 #Angstrome
-variable wavevel equal 6000 #m/s
-variable last equal floor(${xd}/${wavevel}*100/dt)
+#label loopBreak
+#unfix 2
+#variable xd equal 3000 #Angstrome
+#variable wavevel equal 6000 #m/s
+#variable O equal floor(${xd}/${wavevel}*100)
 
-run ${last}
+#if "${current_time}<$O" then "jump SELF run_varts" &
+#else "jump SELF loopBreak"
+#variable xd equal 3000 #Angstrome
+#variable wavevel equal 6000 #m/s
+#variable last equal floor(${xd}/${wavevel}*100)
+
+#run ${last}
 
 #cscの説明に書いてあることだが、コノのプログラムはSLURMのバッチファイルによって動かす。
 #計算規模によって dev.sh S_M.sh large.sh をうまく使い分けること
