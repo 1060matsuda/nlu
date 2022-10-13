@@ -26,35 +26,26 @@ print("Loading the csv file...")
 data_raw = fu.loadCsvOutput(imputFileName)
 print("CSV file has been loaded")
 
-freq_f1 = config["f1"]  # GHz
-"""Bigger frequency [GHz]"""
-freq_f2 = config["f2"]
-"""Smaller frequency [GHz]"""
-freq_fsum = freq_f1+freq_f2
-"""Frequency sum [GHz]"""
-freq_fdif = freq_f1 - freq_f2
-"""Frequency difference [GHz]"""
-freq_fgcd = np.gcd(freq_f1, freq_f2)
-"""Greatest common divisor of frequencies f1 and f2 [GHz]"""
-source_amp_f1 = 1000/freq_f1/20  # A
+freq_f = float(config["f1"])  # GHz
+"""Fundamentalrequency [GHz]"""
+freq_2f = freq_f*2
+"""Second Harmonic [GHz]"""
+source_amp_f = 1000/freq_f/20  # A
 """Amplitude of f1 wave [Å]"""
-source_amp_f2 = 1000/freq_f2/20  # A
-"""Amplitude of f2 wave [Å]"""
+
 #freq_index = 0
 non_detec_cols = int(3)
 # Nc doesnt have to be integer
-Nc_fgcd = int(1)
-Nc_f1 = Nc_fgcd*(freq_f1/freq_fgcd)
-Nc_f2 = Nc_fgcd*(freq_f2/freq_fgcd)  # How many cycles to window
+Nc=int(config["cycles_low"])
+"Number of fundamental wave cycles to window"
 v_expt = 5500  # m/s
 """Experimental value of the longitudinal wave velocity [m/s]"""
 
-T_f1 = 1000/freq_f1
-"""wave f1's wave cycle [ps]"""
-T_f2 = 1000/freq_f2
-"""wave f1's wave cycle [ps]"""
-T_fgcd = 1000/freq_fgcd
-"""Least common multiple of the wave cycles T1 and T2 [ps]. Represents the wave cycle of f_gcd."""
+T_f = 1000/freq_f
+"""FUndamental wave f's wave cycle [ps]"""
+T_2f = 1000/freq_2f
+"""Second harmonic wave 2f's wave cycle [ps]"""
+
 
 data_raw_cols = data_raw.shape[1]
 detecs_num = data_raw_cols - non_detec_cols
@@ -72,38 +63,27 @@ x_source = data_raw[:, 1]
 x_detecs_array = data_raw[:, 2:2+detecs_num]
 x_end = data_raw[:, -1]
 # In most cases, data_raw[:,0] is time, data_raw[:,1] is source, data_raw[:,<last column>] is backend.
-a_f1_at_detecs = np.zeros(detecs_num)
-"""[m]"""
-a_f2_at_detecs = np.zeros(detecs_num)
-"""[m]"""
-a_fsum_at_detecs = np.zeros(detecs_num)
-"""[m]"""
-a_fdif_at_detecs = np.zeros(detecs_num)
+a_f_at_detecs = np.zeros(detecs_num)
 """[m]"""
 
 # not needed for freqmix
-a_2f1_at_detecs = np.zeros(detecs_num)
+a_2f_at_detecs = np.zeros(detecs_num)
 """[Å]"""
-a_3f1_at_detecs = np.zeros(detecs_num)
+a_3f_at_detecs = np.zeros(detecs_num)
 """[Å]"""
-a_4f1_at_detecs = np.zeros(detecs_num)
+a_4f_at_detecs = np.zeros(detecs_num)
 """[Å]"""
 
 beta_SHGs_at_detecs = np.zeros(detecs_num)
 beta_SHGs_at_detecs_corrected = np.zeros(detecs_num)
-beta_sums_at_detecs = np.zeros(detecs_num)
-beta_sums_at_detecs_corrected = np.zeros(detecs_num)
-beta_difs_at_detecs = np.zeros(detecs_num)
-beta_difs_at_detecs_corrected = np.zeros(detecs_num)
-beta_aves_at_detecs = np.zeros(detecs_num)
-beta_aves_at_detecs_corrected = np.zeros(detecs_num)
+
 
 #betaSHGArrayCorrected = np.zeros((len(freqs_f_1), len(detecs)))
 
 #wavelength_f1 = np.zeros(len(freqs_f_1))
 #waveVelocityArray = np.zeros((len(freqs_f_1), len(detecs)))
 
-Ns_f1 = T_f1/timestep  # Ns: Number of data points in one cycle
+Ns_f = T_f/timestep  # Ns: Number of data points in one cycle
 # N: Total Number of data points in thw windowed region
 N_f1 = int(Nc_f1*Ns_f1)
 
@@ -208,7 +188,7 @@ for i in range(detecs_num):
     a_fdif = A_fdif*2/int(len(waveToTransform))*10**-10
     a_fdif_at_detecs[i] = a_fdif
 
-    index_f1 = fu.getIndexOfNearestValue(abs_ffted_data[1], freq_f1*10**9)
+    index_f1 = fu.getIndexOfNearestValue(abs_ffted_data[1], freq_f*10**9)
     A_f1 = abs_ffted_data[0][index_f1]
     a_f1 = A_f1*2/int(len(waveToTransform))*10**-10
     a_f1_at_detecs[i] = a_f1
@@ -219,9 +199,9 @@ for i in range(detecs_num):
     a_f2_at_detecs[i] = a_f2
 
     beta_mix = fu.getBetaFreqMix(a_fsum, a_fdif, source_amp_f1*10**-10, source_amp_f2*10**-10,
-                                 freq_f1*10**9, freq_f2*10**9, delta_x_source_to_thisdetec*10**-10, wave_velocity)
+                                 freq_f*10**9, freq_f2*10**9, delta_x_source_to_thisdetec*10**-10, wave_velocity)
     beta_mix_corrected = fu.getBetaFreqMix(
-        a_fsum, a_fdif, a_f1, a_f2, freq_f1*10**9, freq_f2*10**9, delta_x_source_to_thisdetec*10**-10, wave_velocity_at_detecs_array[i])
+        a_fsum, a_fdif, a_f1, a_f2, freq_f*10**9, freq_f2*10**9, delta_x_source_to_thisdetec*10**-10, wave_velocity_at_detecs_array[i])
 
     beta_sum = beta_mix[0]
     beta_sum_corrected = beta_mix_corrected[0]
@@ -235,7 +215,7 @@ for i in range(detecs_num):
 
     # higher harmonics amplitude[arb]
     harmonicsIndex = fu.getIndexUpToSixthHarmonic(
-        abs_ffted_data[1], freq_f1*10**9)
+        abs_ffted_data[1], freq_f*10**9)
     A_f1 = abs_ffted_data[0][harmonicsIndex[0]]
     A_2f1 = abs_ffted_data[0][harmonicsIndex[1]]
     A_3f1 = abs_ffted_data[0][harmonicsIndex[2]]
@@ -496,7 +476,7 @@ A_fdif = abs_ffted_data[0][index_fdif]
 a_fdif = A_fdif*2/int(len(waveToTransform))*10**-10
 a_fdif_at_detecs[i] = a_fdif
 
-index_f1 = fu.getIndexOfNearestValue(abs_ffted_data[1], freq_f1*10**9)
+index_f1 = fu.getIndexOfNearestValue(abs_ffted_data[1], freq_f*10**9)
 A_f1 = abs_ffted_data[0][index_f1]
 a_f1 = A_f1*2/int(len(waveToTransform))*10**-10
 a_f1_at_detecs[i] = a_f1
@@ -507,9 +487,9 @@ a_f2 = A_f2 * 2/int(len(waveToTransform))*10**-10
 a_f2_at_detecs[i] = a_f2
 
 beta_mix = fu.getBetaFreqMix(a_fsum, a_fdif, source_amp_f1*10**-10, source_amp_f2*10**-10,
-                             freq_f1*10**9, freq_f2*10**9, delta_x_source_to_thisdetec*10**-10, wave_velocity)
+                             freq_f*10**9, freq_f2*10**9, delta_x_source_to_thisdetec*10**-10, wave_velocity)
 beta_mix_corrected = fu.getBetaFreqMix(
-    a_fsum, a_fdif, a_f1, a_f2, freq_f1*10**9, freq_f2*10**9, delta_x_source_to_thisdetec*10**-10, wave_velocity_at_detecs_array[i])
+    a_fsum, a_fdif, a_f1, a_f2, freq_f*10**9, freq_f2*10**9, delta_x_source_to_thisdetec*10**-10, wave_velocity_at_detecs_array[i])
 
 beta_sum = beta_mix[0]
 beta_sum_corrected = beta_mix_corrected[0]
@@ -523,7 +503,7 @@ beta_difs_at_detecs_corrected[i] = beta_dif_corrected
 
 # higher harmonics amplitude[arb]
 harmonicsIndex = fu.getIndexUpToSixthHarmonic(
-    abs_ffted_data[1], freq_f1*10**9)
+    abs_ffted_data[1], freq_f*10**9)
 A_f1 = abs_ffted_data[0][harmonicsIndex[0]]
 A_2f1 = abs_ffted_data[0][harmonicsIndex[1]]
 A_3f1 = abs_ffted_data[0][harmonicsIndex[2]]
@@ -559,8 +539,8 @@ beta_SHGs_at_detecs_corrected[i] = beta_shg_corrected
 fig, ax = plt.subplots()
 ax.set_yscale("log")
 #ax.plot(absFFTData[1,1:int(N/2)], absFFTData[0,1:int(N/2)])
-ax.plot(abs_ffted_data[1, 0:fu.getIndexOfNearestValue(abs_ffted_data[1], max(freq_f1*10**9, freq_f2*10**9))*4],
-        abs_ffted_data[0, 0:fu.getIndexOfNearestValue(abs_ffted_data[1], max(freq_f1*10**9, freq_f2*10**9))*4], marker="o", linestyle="--")
+ax.plot(abs_ffted_data[1, 0:fu.getIndexOfNearestValue(abs_ffted_data[1], max(freq_f*10**9, freq_f2*10**9))*4],
+        abs_ffted_data[0, 0:fu.getIndexOfNearestValue(abs_ffted_data[1], max(freq_f*10**9, freq_f2*10**9))*4], marker="o", linestyle="--")
 ax.set_xlabel("Freqency [Hz]")
 ax.set_ylabel("Amplitude [arb.]")
 ax.grid()
