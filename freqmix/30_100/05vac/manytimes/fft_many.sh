@@ -3,7 +3,7 @@ module load cray-python/3.8.5.1
 source ~/my_env_dir_python3/bin/activate
 
 echo "sed started"
-for i in `seq 50`
+for i in `seq 10`
 do
 	echo $i
 	cd $i
@@ -11,7 +11,7 @@ do
 	cd ..
 done
 echo "FFT started"
-for i in `seq 50`
+for i in `seq 10`
 do
 	echo $i
 	cd $i
@@ -21,7 +21,7 @@ done
 
 echo "creating .gitignore"
 cp $MYWORK/common_files/gitignore_betaonly ./default/.gitignore
-for i in `seq 50`
+for i in `seq 10`
 do
 	echo $i	
 	cp ./default/.gitignore $i

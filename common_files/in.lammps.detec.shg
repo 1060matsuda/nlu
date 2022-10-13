@@ -212,8 +212,8 @@ variable omega2 equal 2.0*PI/${T2}
 ###
 
 ###500GHz single test###
-variable myx equal $A*sin(${omega1}*time)
-variable myv equal $A*cos(${omega1}*time)  
+variable myx equal ${A1}*sin(${omega1}*time)
+variable myv equal ${A1}*cos(${omega1}*time)  
 ###
 
 

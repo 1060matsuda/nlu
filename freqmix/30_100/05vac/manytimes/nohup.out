@@ -1,0 +1,53 @@
+sed started
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+FFT started
+1
+sys:1: RankWarning: Polyfit may be poorly conditioned
+sys:1: RankWarning: Polyfit may be poorly conditioned
+2
+sys:1: RankWarning: Polyfit may be poorly conditioned
+sys:1: RankWarning: Polyfit may be poorly conditioned
+3
+sys:1: RankWarning: Polyfit may be poorly conditioned
+sys:1: RankWarning: Polyfit may be poorly conditioned
+4
+sys:1: RankWarning: Polyfit may be poorly conditioned
+sys:1: RankWarning: Polyfit may be poorly conditioned
+5
+sys:1: RankWarning: Polyfit may be poorly conditioned
+sys:1: RankWarning: Polyfit may be poorly conditioned
+6
+sys:1: RankWarning: Polyfit may be poorly conditioned
+sys:1: RankWarning: Polyfit may be poorly conditioned
+7
+sys:1: RankWarning: Polyfit may be poorly conditioned
+sys:1: RankWarning: Polyfit may be poorly conditioned
+8
+sys:1: RankWarning: Polyfit may be poorly conditioned
+sys:1: RankWarning: Polyfit may be poorly conditioned
+9
+sys:1: RankWarning: Polyfit may be poorly conditioned
+sys:1: RankWarning: Polyfit may be poorly conditioned
+10
+sys:1: RankWarning: Polyfit may be poorly conditioned
+sys:1: RankWarning: Polyfit may be poorly conditioned
+creating .gitignore
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
