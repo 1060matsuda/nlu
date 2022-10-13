@@ -115,7 +115,8 @@ variable i equal time
 variable FIG string iranai
 variable f equal fcm(detector,x)
 variable l equal vcm(detector,x)
-
+variable xd equal 3000 #Angstrome
+variable wavevel equal 6000 #m/s
 ##############################################
 variable rescaleSteps equal 0
 variable relaxationSteps equal 0
@@ -234,7 +235,7 @@ fix 2 source move variable v_myx NULL NULL v_myv NULL NULL
 #edgeの初期位置を代入する。
 #variable w equal 2003.009786
 ##########variable w equal 1987.305504
-
+variable R equal ${xd}/${wavevel}*100/dt
 #loop
 label run_varts
 run 500
@@ -269,8 +270,7 @@ variable q equal "v_g-v_w"
 displace_atoms buffer move v_q 0.0 0.0
 
 #3.5周期分の波を導入している。導入する波の周波数に合わせて変更する必要がある。
-variable xd equal 3000 #Angstrome
-variable wavevel equal 6000 #m/s
+
 variable O equal $Q+${xd}/${wavevel}*100
 if "${current_time}<$O" then "jump SELF run_varts" &
 else "jump SELF loopBreak"
@@ -285,7 +285,7 @@ label loopBreak
 #else "jump SELF loopBreak"
 #variable xd equal 3000 #Angstrome
 #variable wavevel equal 6000 #m/s
-#variable last equal floor(${xd}/${wavevel}*100)
+#variable last equal floor(${xd}/${wavevel}*100/dt)
 
 #run ${last}
 
