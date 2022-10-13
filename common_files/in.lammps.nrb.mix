@@ -172,6 +172,7 @@ fix 1 all nve
 
 ############################################################
 variable current_time equal time
+variable w equal $g
 #variable A equal 0.1
 #variable T equal 2.0
 #variable A equal 10.0
