@@ -238,13 +238,17 @@ fix 2 source move variable v_myx NULL NULL v_myv NULL NULL
 variable R equal ${xd}/${wavevel}*100/dt
 #loop
 label run_varts
-run 500
+shell bash $MYWORK/common_files/delete_restart.sh
+write_restart *.restart
+run $R 
+#run 1000
 #velocity buffer set 0.0 0.0 0.0
 #displace_atoms buffer move 0.0 0.0 0.0
 ##########variable j equal xcm(edge_buf,x)
 ###########variable z equal $j
 # variabel g equal xcm(edge,x)
-#
+
+
 ### バッファ層の原子を一度消去し、add.latからデータを読み取りもう一度原子を導入する。
 delete_atoms group buffer
 #read_data   ./Fe.lat
