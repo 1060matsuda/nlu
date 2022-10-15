@@ -57,7 +57,7 @@ T_fgcd = 1000/freq_fgcd
 """Least common multiple of the wave cycles T1 and T2 [ps]. Represents the wave cycle of f_gcd."""
 
 data_raw_cols = data_raw.shape[1]
-detecs_num = data_raw_cols - non_detec_cols
+detecs_num = 21
 # In most cases, data_raw[:,0] is time, data_raw[:,1] is source, data_raw[:,<last column>] is backend.
 
 time = data_raw[:, 0]
@@ -70,7 +70,7 @@ if (int(time[-1]/timestep) != len(time)-1):
     sys.exit()
 x_source = data_raw[:, 1]
 x_detecs_array = data_raw[:, 2:2+detecs_num]
-x_end = data_raw[:, -1]
+x_end = data_raw[:, 2+detecs_num]
 # In most cases, data_raw[:,0] is time, data_raw[:,1] is source, data_raw[:,<last column>] is backend.
 a_f1_at_detecs = np.zeros(detecs_num)
 """[m]"""

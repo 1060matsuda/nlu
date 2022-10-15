@@ -57,7 +57,7 @@ T_fgcd = 1000/freq_fgcd
 """Least common multiple of the wave cycles T1 and T2 [ps]. Represents the wave cycle of f_gcd."""
 
 data_raw_cols = data_raw.shape[1]
-detecs_num = 1
+detecs_num = 20
 # In most cases, data_raw[:,0] is time, data_raw[:,1] is source, data_raw[:,<last column>] is backend.
 
 time = data_raw[:, 0]
