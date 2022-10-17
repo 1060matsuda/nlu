@@ -18,8 +18,8 @@ atom_style  atomic
 boundary p p p
 
 #計算量に問題がないのなら0.001[ps]にするのが望ましい。
-#timestep    0.001
-timestep    0.0005
+timestep    0.001
+#timestep    0.0005
 read_data   ./Fe.lat
 
 #ポテンシャルファイルからポテンシャルを与えている。
@@ -150,7 +150,7 @@ minimize 1.0e-30 1.0e-30 10000 10000
 unfix mm2
 write_data aftermm.lat
 shell "source $MYWORK/common_files/buffer_region_extractor.sh"
-#dump myDump all atom 100 dump.atom
+dump myDump all atom 1000 dump.atom
 #nveで系を設定し粒子をminimizeで沈静化させている。minimizeが甘いと超音波信号が不規則に揺れることがある。
 fix 1 all nve
 #fix 1 all nvt temp 0.1 0.1 1
