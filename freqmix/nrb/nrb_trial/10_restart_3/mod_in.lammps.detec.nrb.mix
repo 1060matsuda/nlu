@@ -143,7 +143,7 @@ variable w equal $g
 #variable B equal -1*$A
 #variable T equal 200.0
 
-dump myDump all atom 2000 dump.debug
+dump myDump all atom 500 dump.debug
 ##振幅、周期を定める。
 variable f1 equal 5 #GHz
 variable f2 equal 1.5
