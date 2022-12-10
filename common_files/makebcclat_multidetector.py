@@ -15,18 +15,23 @@ DIST_X = LAT_CONST
 DIST_Y = LAT_CONST
 DIST_Z = LAT_CONST
 
+with open("config.yaml", "r") as yml:
+    config = yaml.safe_load(yml)
+
 # the size of the whole simulation cell
 # N_Y and N_Z represents the length of the cell (unit: lattice constant)
 num = 20  # determins the size of the plane 100
 N_Y = num
 N_Z = num
 
-frequency_low = 30  # GHz
+frequency_high = float(config["f1"])
+frequency_low = float(config["f2"])  # GHz
 cycles = 6
 
 # detector location
-N_X_D = 201
-
+N_X_D = int(100000/frequency_high + 1)
+print("N_X_D")
+print(N_X_D)
 N_BUF = math.ceil(N_X_D + 12000*cycles/frequency_low)
 
 # The cell length including the buffer layer

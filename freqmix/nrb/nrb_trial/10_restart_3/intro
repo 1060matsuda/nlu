@@ -1,0 +1,8 @@
+I found the when lammps reads the restart file, 
+unfortunately time is reset to zero.
+
+This time the variable "i" is modified, so that the time succeeds the former simulation.
+
+-> the simulation stops for the same reason, at the similar timestep.
+
+This time dump file will be created before the simulation collapses, and I'll check the morphology later.

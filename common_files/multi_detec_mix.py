@@ -57,7 +57,7 @@ T_fgcd = 1000/freq_fgcd
 """Least common multiple of the wave cycles T1 and T2 [ps]. Represents the wave cycle of f_gcd."""
 
 data_raw_cols = data_raw.shape[1]
-detecs_num = data_raw_cols - non_detec_cols
+detecs_num = 21
 # In most cases, data_raw[:,0] is time, data_raw[:,1] is source, data_raw[:,<last column>] is backend.
 
 time = data_raw[:, 0]
@@ -70,7 +70,7 @@ if (int(time[-1]/timestep) != len(time)-1):
     sys.exit()
 x_source = data_raw[:, 1]
 x_detecs_array = data_raw[:, 2:2+detecs_num]
-x_end = data_raw[:, -1]
+x_end = data_raw[:, 2+detecs_num]
 # In most cases, data_raw[:,0] is time, data_raw[:,1] is source, data_raw[:,<last column>] is backend.
 a_f1_at_detecs = np.zeros(detecs_num)
 """[m]"""
@@ -121,8 +121,9 @@ if(N_f1 != N_f2 or N_f2 != N_fgcd or N_fgcd != N_f1):
 u_detecs_array = x_detecs_array - x_detecs_array[0]
 
 delta_x_source_detec0 = x_detecs_array[0, 0] - x_source[0]
-delta_x_detecs = x_detecs_array[0, 1] - x_detecs_array[0, 0]
-delta_t_detecs = delta_x_detecs/10*(10**3)/5500  # ps
+if detecs_num >= 2:
+    delta_x_detecs = x_detecs_array[0, 1] - x_detecs_array[0, 0]
+    delta_t_detecs = delta_x_detecs/10*(10**3)/5500  # ps
 trimmed_waves = np.zeros((detecs_num, N_fgcd))
 windowed_waves = np.zeros((detecs_num, N_fgcd))
 wave_velocity_at_detecs_array = np.zeros(detecs_num)
