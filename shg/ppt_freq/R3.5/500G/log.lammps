@@ -1,0 +1,35 @@
+LAMMPS (3 Mar 2020)
+#################################
+#two psrts have to be corrected
+#Vacancy >> type : Fe Fe Fe Fe Fe Fe Fe Fe Fe
+#Cu      >> type : Fe Fe Fe Fe Fe Fe Fe Fe Fe Cu
+#################################
+
+####
+#variable nvt_temp      equal 0.1                     # Temperature
+#variable npt_temp      equal 0.1
+####
+#系の基本状態を定める。詳細はLAMMPSのサイトを参照
+
+#variable press        equal 1.01325                    # Atomic Mass
+
+units       metal
+atom_style  atomic
+#xyz方向すべて周期的境界条件にしている。x方向のみ真空領域を作り非周期性を出している
+boundary p p p
+
+#計算量に問題がないのなら0.001[ps]にするのが望ましい。
+#timestep    0.001
+timestep    0.001
+read_data   ./Fe.lat
+  orthogonal box = (-1427.66 0 0) to (9996.49 285.532 285.532)
+  256 by 4 by 5 MPI processor grid
+  reading atoms ...
+  59818851 atoms
+  read_data CPU = 47.1995 secs
+#read_data afterboxrelax.cuppt.lat
+#ポテンシャルファイルからポテンシャルを与えている。
+pair_style  eam/alloy
+pair_coeff  * * ./FeCuNi.eam.alloy Fe Fe Fe Fe Fe Fe Fe Fe Fe Cu
+ERROR: Incorrect args for pair coefficients (../pair_eam_alloy.cpp:52)
+Last command: pair_coeff  * * ./FeCuNi.eam.alloy Fe Fe Fe Fe Fe Fe Fe Fe Fe Cu

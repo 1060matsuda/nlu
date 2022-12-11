@@ -1,0 +1,6 @@
+f1: 200 #GHz
+f2: 200 #GHz
+timestep: 0.001 #ps
+#zerocross_start_rate: 0.95
+defects_rate: 0.01
+defects_radius: 70 #A
