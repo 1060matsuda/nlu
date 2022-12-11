@@ -18,10 +18,11 @@ atom_style  atomic
 boundary p p p
 
 #計算量に問題がないのなら0.001[ps]にするのが望ましい。
+#timestep 0.01
 #timestep    0.001
 timestep    TIMESTEP_REPLACE_YAML
 #read_data   ./Fe.lat
-read_data afterboxrelax.cuppt.lat
+read_data ../afterboxrelax.cuppt.lat
 #ポテンシャルファイルからポテンシャルを与えている。
 pair_style  eam/alloy
 pair_coeff  * * ./FeCuNi.eam.alloy Fe Fe Fe Fe Fe Fe Fe Fe Fe Cu
@@ -145,7 +146,7 @@ minimize 1.0e-18 1.0e-18 10000 10000
 fix mm1 all box/relax aniso 0.0 couple yz vmax 0.01
 minimize 1.0e-18 1.0e-18 10000 10000
 unfix mm1
-write_data ./afterboxrelax.cuppt.lat
+#write_data ./afterboxrelax.cuppt.lat
 fix mm2 all nve
 minimize 1.0e-18 1.0e-18 10000 10000
 unfix mm2
@@ -242,6 +243,8 @@ variable R equal ${xd}/${wavevel}*100/dt
 shell "bash $MYWORK/common_files/delete_restart.sh"
 write_restart *.restart
 run $R 
+shell "bash $MYWORK/common_files/delete_restart.sh"
+write_restart *.restart
 #run 1000
 #velocity buffer set 0.0 0.0 0.0
 #displace_atoms buffer move 0.0 0.0 0.0
@@ -273,10 +276,10 @@ label run_varts
 #variable q equal $z-$w
 ####################1134.27745900039
 #displace_atoms buffer move v_q 0.0 0.0
-shell "bash $MYWORK/common_files/delete_restart.sh"
-write_restart *.restart
 variable runsteps equal round(40/dt)
 run ${runsteps}
+shell "bash $MYWORK/common_files/delete_restart.sh"
+write_restart *.restart
 #3.5周期分の波を導入している。導入する波の周波数に合わせて変更する必要がある。
 
 variable O equal $Q+${xd}/${wavevel}*100

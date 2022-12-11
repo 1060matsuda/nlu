@@ -86,7 +86,7 @@ cut_off = 5.6
 
 # in order to get the whole simulation box to be non-cyclic, we must put vacuum zone at the both end in x-direction.
 # the thickness of the vaccum is set as the variable "indent", seen below:
-indent = 500  # indent should not be zero
+indent = 5000  # indent should not be zero
 
 print(n_vacancy)
 
@@ -431,7 +431,7 @@ defect_radius = float(config["defects_radius"])
 if __name__ == "__main__":
     argvs = sys.argv
     make_perfect()
-    arrange_lat(defect_radius, 1)  # (R ,type) type= vacancy:1 , Cu: 2
+    arrange_lat(defect_radius, 2)  # (R ,type) type= vacancy:1 , Cu: 2
 
     # input_empty()
     # and RATE or num (=N_X,N_Y)are all parameters
