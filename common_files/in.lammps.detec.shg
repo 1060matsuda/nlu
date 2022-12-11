@@ -19,7 +19,7 @@ boundary p p p
 
 #計算量に問題がないのなら0.001[ps]にするのが望ましい。
 #timestep 0.01
-timestep    0.0005
+timestep TIMESTEP_REPLACE_YAML
 #timestep    0.01
 #timestep 0.1
 read_data   ./Fe.lat
@@ -182,7 +182,7 @@ variable current_time equal time
 
 #とりあえず500GHz, 200GHzでやってみる．
 ##振幅、周期を定める。
-variable f1 equal 200
+variable f1 equal F1_REPLACE_YAML
 variable T1 equal 1000/${f1}
 variable T2 equal 5 
 variable A equal ${T1}/20
@@ -273,7 +273,7 @@ else "jump SELF loopBreak"
 
 label loopBreak
 unfix 2
-variable xd equal 600 #Angstrome
+variable xd equal 100000/${f1}*3 #Angstrome
 variable wavevel equal 6000 #m/s
 variable last equal floor(${xd}/${wavevel}*100/dt)
 

@@ -20,11 +20,12 @@ boundary p p p
 #計算量に問題がないのなら0.001[ps]にするのが望ましい。
 #timestep    0.001
 timestep    TIMESTEP_REPLACE_YAML
-read_data   ./Fe.lat
-
+#read_data   ./Fe.lat
+read_data afterboxrelax.cuppt.lat
 #ポテンシャルファイルからポテンシャルを与えている。
 pair_style  eam/alloy
-pair_coeff  * * ./FeCuNi.eam.alloy Fe Fe Fe Fe Fe Fe Fe Fe Fe
+pair_coeff  * * ./FeCuNi.eam.alloy Fe Fe Fe Fe Fe Fe Fe Fe Fe Cu
+#pair_coeff  * * ./FeCuNi.eam.alloy Fe Fe Fe Fe Fe Fe Fe Fe Fe 
 #pair_coeff  * * ./new_potential/FeCuNi.eam.alloy Fe Fe Fe Fe Cu
 #mass        *4 ${mass}
 #mass        5 58.454 correct value!!!
@@ -139,17 +140,18 @@ thermo 1
 #run ${relaxationSteps}
 #minimize 1.0e-18 1.0e-18 100000 100000
 
-minimize 1.0e-30 1.0e-30 10000 10000
+minimize 1.0e-18 1.0e-18 10000 10000
 
 fix mm1 all box/relax aniso 0.0 couple yz vmax 0.01
-minimize 1.0e-30 1.0e-30 10000 10000
+minimize 1.0e-18 1.0e-18 10000 10000
 unfix mm1
-#write_data ./afterboxrelax.cuppt.lat
+write_data ./afterboxrelax.cuppt.lat
 fix mm2 all nve
-minimize 1.0e-30 1.0e-30 10000 10000
+minimize 1.0e-18 1.0e-18 10000 10000
 unfix mm2
+#write_data ./afterboxrelax.cuppt.lat.2
 
-dump myDump all atom 100 dump.atom
+#dump myDump all atom 100 dump.atom
 #nveで系を設定し粒子をminimizeで沈静化させている。minimizeが甘いと超音波信号が不規則に揺れることがある。
 fix 1 all nve
 #fix 1 all nvt temp 0.1 0.1 1
@@ -207,13 +209,13 @@ variable omega2 equal 2.0*PI/${T2}
 #variable myx atom ${myx0} + $A*sin(${omega}*time)
 
 ###NORMAL MIX SETTING###
-variable myx equal ${A1}*sin(${omega1}*time)+${A2}*sin(${omega2}*time)
-variable myv equal ${A1}*cos(${omega1}*time)+${A2}*cos(${omega2}*time)  
+#variable myx equal ${A1}*sin(${omega1}*time)+${A2}*sin(${omega2}*time)
+#variable myv equal ${A1}*cos(${omega1}*time)+${A2}*cos(${omega2}*time)  
 ###
 
 ###SHG###
-#variable myx equal $A1*sin(${omega1}*time)
-#variable myv equal $A1*cos(${omega1}*time)  
+variable myx equal ${A1}*sin(${omega1}*time)
+variable myv equal ${A1}*cos(${omega1}*time)  
 ###
 
 fix extra all print 1 "$i $s $d $g $l $f $t $v $e $p" file outp_1.txt
@@ -237,8 +239,7 @@ fix 2 source move variable v_myx NULL NULL v_myv NULL NULL
 ##########variable w equal 1987.305504
 variable R equal ${xd}/${wavevel}*100/dt
 #loop
-label run_varts
-shell bash "$MYWORK/common_files/delete_restart.sh"
+shell "bash $MYWORK/common_files/delete_restart.sh"
 write_restart *.restart
 run $R 
 #run 1000
@@ -248,31 +249,34 @@ run $R
 ###########variable z equal $j
 # variabel g equal xcm(edge,x)
 
-
+label run_varts
 ### バッファ層の原子を一度消去し、add.latからデータを読み取りもう一度原子を導入する。
-delete_atoms group buffer
+#delete_atoms group buffer
 #read_data   ./Fe.lat
-read_data   ./add.lat add merge group buffer
+#read_data   ./add.lat add merge group buffer
 #read_data   ./add.lat add append
 #6の意味がわからな
 #read_data   ./add.lat add append 6 group buffer
 
-group edge_buf type 7
-group buffer type 7 8 9
+#group edge_buf type 7
+#group buffer type 7 8 9
 
 #print('$j')
 #print('$z')
 ##########print $j
 ##########print $z
 ####edgeの原子層の重心位置に対して変位が生じないように原子位置を移動させる。gがedgeの重心位置を表す。
-print $g
-print $w
+#print $g
+#print $w
 #variable g equal xcm(edge,x)
-variable q equal "v_g-v_w"
+#variable q equal "v_g-v_w"
 #variable q equal $z-$w
 ####################1134.27745900039
-displace_atoms buffer move v_q 0.0 0.0
-
+#displace_atoms buffer move v_q 0.0 0.0
+shell "bash $MYWORK/common_files/delete_restart.sh"
+write_restart *.restart
+variable runsteps equal round(40/dt)
+run ${runsteps}
 #3.5周期分の波を導入している。導入する波の周波数に合わせて変更する必要がある。
 
 variable O equal $Q+${xd}/${wavevel}*100

@@ -149,7 +149,7 @@ fix mm2 all nve
 minimize 1.0e-30 1.0e-30 10000 10000
 unfix mm2
 
-dump myDump all atom 100 dump.atom
+#dump myDump all atom 100 dump.atom
 #nveで系を設定し粒子をminimizeで沈静化させている。minimizeが甘いと超音波信号が不規則に揺れることがある。
 fix 1 all nve
 #fix 1 all nvt temp 0.1 0.1 1
@@ -207,13 +207,13 @@ variable omega2 equal 2.0*PI/${T2}
 #variable myx atom ${myx0} + $A*sin(${omega}*time)
 
 ###NORMAL MIX SETTING###
-variable myx equal ${A1}*sin(${omega1}*time)+${A2}*sin(${omega2}*time)
-variable myv equal ${A1}*cos(${omega1}*time)+${A2}*cos(${omega2}*time)  
+#variable myx equal ${A1}*sin(${omega1}*time)+${A2}*sin(${omega2}*time)
+#variable myv equal ${A1}*cos(${omega1}*time)+${A2}*cos(${omega2}*time)  
 ###
 
 ###SHG###
-#variable myx equal $A1*sin(${omega1}*time)
-#variable myv equal $A1*cos(${omega1}*time)  
+variable myx equal {$A1}*sin(${omega1}*time)
+variable myv equal {$A1}*cos(${omega1}*time)  
 ###
 
 fix extra all print 1 "$i $s $d $g $l $f $t $v $e $p" file outp_1.txt

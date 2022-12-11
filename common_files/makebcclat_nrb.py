@@ -22,14 +22,14 @@ with open("config.yaml", "r") as yml:
 
 # the size of the whole simulation cell
 # N_Y and N_Z represents the length of the cell (unit: lattice constant)
-num = 20  # determins the size of the plane 100
+num = 100 # determins the size of the plane 100
 N_Y = num
 N_Z = num
 
 frequency_high = float(config["f1"])
 frequency_low = float(config["f2"])  # GHz
 """[GHz]"""
-cycles = 6
+cycles = 4
 """Specify how many cycles of low-frequency-wave you want to input."""
 
 # detector location
@@ -130,6 +130,8 @@ def make_perfect():
     5:atoms at the right end of the simulation box (called "edge"). It depends on the crystalline structure whether to denote 5 or 6. In this program only 6 is used.
     7,8,9:atoms in the region of the right side of the edge (=buffer layer).It depends on the crystalline structure whether to denote 7, 8, or 9. In this program, three numbers are treated equally.
     detailed information (I didn't understand well though) about 9 and 10 is described in the original makebcclat.py."""
+    
+    print("building perfect lattice...")
     count = 0
     # make perfect lattice
     for ix in range(N_BIG):
@@ -191,7 +193,7 @@ def make_perfect():
                     perfect[count] = [count+1, surf1[0]+ix*LAT_CONST, surf1[1]+iy*LAT_CONST, surf1[2] +
                                       iz*LAT_CONST, 10, 1, surf1[1]+(iy-N_Y)*LAT_CONST, surf1[2]+(iz-N_Z)*LAT_CONST]
                     count += 1
-
+    print("perfect lattice has been built")
 
 def center(x):
     if x % 2 == 0:
@@ -206,8 +208,12 @@ def center(x):
 # in case of precipitates, this will change the group ID of some atoms into 10
 # If Vac_Cu == 1, then it'll introduce vacancies or voids. If Vac_Cu == 2, then it'll introduce precipitates
 def arrange_lat(R, Vac_Cu):
+    print("introducing defects...")
     del_num = 0
     klist = [1]  # absolutely not be void in this position
+    defects_data_file="defects_data.txt"
+    with open(defects_data_file, "w"):
+        pass
     # When seed is specified as constant, output lattice will always be the same.
     # np.random.seed(seed=32)
     plist = np.random.randint(1, n_arrange+1, n_atoms)
@@ -262,6 +268,10 @@ def arrange_lat(R, Vac_Cu):
                         if neighbor(p, klist[k], R, 2*R) == 1:
                             break
                     if k == len(klist)-1:
+                        print("creating a defect...")
+                        f = open(defects_data_file, "a")
+                        f.write("%12d %6d %12.6f %12.6f %12.6f\n" % (i+1, perfect[p, 4], perfect[p, 1], perfect[p, 2], perfect[p, 3]))
+                        f.close()
                         for v in range(n_arrange):
                             if neighbor(p, v, R, 0) == 1:
                                 if Vac_Cu == 1:
@@ -277,6 +287,7 @@ def arrange_lat(R, Vac_Cu):
                                     # print(del_num)
                                     klist.append(v)
                                     # print(len(klist)-1)
+                        print("Created a defect. Looking for another place to nucleate a defect...")
     print("Number of deleted/modified atoms is")
     print(del_num)
     print("point-defect-equivalent density:")

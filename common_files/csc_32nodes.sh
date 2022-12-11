@@ -8,9 +8,11 @@
 #SBATCH --mail-user="matsuda-nayuta775@g.ecc.u-tokyo.ac.jp"
 #SBATCH --job-name=vac05_50
 
-for i in `seq 50`
-do
-cd $i
-srun /project/HEDISINT/lammps/lammps/src/lmp_mpi -in mod_in.lammps.mix
-cd ..
-done
+#for i in `seq 50`
+#do
+#cd $i
+#srun /project/HEDISINT/lammps/lammps/src/lmp_mpi -in mod_in.lammps.mix
+#cd ..
+#done
+
+srun /project/HEDISINT/lammps/lammps/src/lmp_mpi -in mod_in.lammps.nonrb.shg
