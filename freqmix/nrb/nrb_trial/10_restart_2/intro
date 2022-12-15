@@ -1,0 +1,5 @@
+I found the when lammps reads the restart file, 
+unfortunately time is reset to zero.
+
+This time the variable "i" is modified, so that the time succeeds the former simulation.
+

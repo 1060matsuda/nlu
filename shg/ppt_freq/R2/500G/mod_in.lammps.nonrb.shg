@@ -1,0 +1,305 @@
+#################################
+#two psrts have to be corrected
+#Vacancy >> type : Fe Fe Fe Fe Fe Fe Fe Fe Fe
+#Cu      >> type : Fe Fe Fe Fe Fe Fe Fe Fe Fe Cu
+#################################
+
+####
+#variable nvt_temp      equal 0.1                     # Temperature
+#variable npt_temp      equal 0.1
+####
+#系の基本状態を定める。詳細はLAMMPSのサイトを参照
+
+#variable press        equal 1.01325                    # Atomic Mass
+
+units       metal 
+atom_style  atomic
+#xyz方向すべて周期的境界条件にしている。x方向のみ真空領域を作り非周期性を出している
+boundary p p p
+
+#計算量に問題がないのなら0.001[ps]にするのが望ましい。
+#timestep 0.01
+#timestep    0.001
+timestep    0.01
+read_data   ./Fe.lat
+#read_data ../afterboxrelax.cuppt.lat
+#ポテンシャルファイルからポテンシャルを与えている。
+pair_style  eam/alloy
+pair_coeff  * * ./FeCuNi.eam.alloy Fe Fe Fe Fe Fe Fe Fe Fe Fe Cu
+#pair_coeff  * * ./FeCuNi.eam.alloy Fe Fe Fe Fe Fe Fe Fe Fe Fe 
+#pair_coeff  * * ./new_potential/FeCuNi.eam.alloy Fe Fe Fe Fe Cu
+#mass        *4 ${mass}
+#mass        5 58.454 correct value!!!
+
+#原子グループに名前を与えている。
+#group d1 type 1
+#group d2 type 2
+#group d3 type 3
+#group d4 type 4
+#group d5 type 5
+#group d6 type 6
+#group d7 type 7
+#group d8 type 8
+#group d9 type 9
+#group d10 type 10
+#group d11 type 11
+#group d12 type 12
+#group d13 type 13
+#group d14 type 14
+#group d15 type 15
+#group d16 type 16
+#group d17 type 17
+#group d18 type 18
+#group d19 type 19
+#group d20 type 20
+#group d21 type 21
+#group d22 type 22
+#group d23 type 23
+#group d24 type 24
+#group d25 type 25
+#group d26 type 26
+#group d27 type 27
+#group d28 type 28
+#group d29 type 29
+#group d30 type 30
+#group d31 type 31
+#group d32 type 32
+##lammps groups shoud be Ngroups<32 (max 31)
+group source type 2
+group detector type 3
+group edge type 6
+group edge_buf type 7
+group buffer type 7 8 9
+#group longage type 9
+
+#欲しい情報に記号を割り当てファイル出力させている。
+#variable u1 equal xcm(d1,x)
+#variable u2 equal xcm(d2,x)
+#variable u3 equal xcm(d3,x)
+#variable u4 equal xcm(d4,x)
+#variable u5 equal xcm(d5,x)
+#variable u6 equal xcm(d6,x)
+#variable u7 equal xcm(d7,x)
+#variable u8 equal xcm(d8,x)
+#variable u9 equal xcm(d9,x)
+#variable u10 equal xcm(d10,x)
+#variable u11 equal xcm(d11,x)
+#variable u12 equal xcm(d12,x)
+#variable u13 equal xcm(d13,x)
+#variable u14 equal xcm(d14,x)
+#variable u15 equal xcm(d15,x)
+#variable u16 equal xcm(d16,x)
+#variable u17 equal xcm(d17,x)
+#variable u18 equal xcm(d18,x)
+#variable u19 equal xcm(d19,x)
+#variable u20 equal xcm(d20,x)
+#variable u21 equal xcm(d21,x)
+#variable u22 equal xcm(d22,x)
+#variable u23 equal xcm(d23,x)
+#variable u24 equal xcm(d24,x)
+#variable u25 equal xcm(d25,x)
+#variable u26 equal xcm(d26,x)
+#variable u27 equal xcm(d27,x)
+#variable u28 equal xcm(d28,x)
+#variable u29 equal xcm(d29,x)
+#variable u30 equal xcm(d30,x)
+#variable u31 equal xcm(d31,x)
+#variable u32 equal xcm(d32,x)
+
+variable s equal xcm(source,x)
+variable d equal xcm(detector,x)
+variable g equal xcm(edge,x)
+variable t equal temp
+variable p equal press
+variable v equal vol
+variable e equal etotal
+variable i equal time
+variable FIG string iranai
+variable f equal fcm(detector,x)
+variable l equal vcm(detector,x)
+variable xd equal 3000 #Angstrome
+variable wavevel equal 6000 #m/s
+##############################################
+variable rescaleSteps equal 0
+variable relaxationSteps equal 0
+variable initialSteps equal ${rescaleSteps}+${relaxationSteps}
+##############################################
+
+
+thermo 1
+#thermo_style custom time v_sox v_dex temp vol etotal v_FIG
+
+
+
+#minimize 1.0e-18 1.0e-18 100000 100000
+#fix npt1 all npt temp ${npt_temp} ${npt_temp} 1 iso ${atmos} ${atmos} 1
+#velocity all create ${npt_temp} 12345 dist gaussian
+#velocity all create ${npt_temp} ${rand} dist gaussian
+#fix rescale all temp/rescale 1 50 50 1.0 1.0
+##run ${rescaleSteps}
+#unfix rescale
+#run ${relaxationSteps}
+#minimize 1.0e-18 1.0e-18 100000 100000
+
+minimize 1.0e-18 1.0e-18 10000 10000
+
+fix mm1 all box/relax aniso 0.0 couple yz vmax 0.01
+minimize 1.0e-18 1.0e-18 10000 10000
+unfix mm1
+#write_data ./afterboxrelax.cuppt.lat
+fix mm2 all nve
+minimize 1.0e-18 1.0e-18 10000 10000
+unfix mm2
+write_data ./afterboxrelax.cupptr4.lat.e-18
+
+#dump myDump all atom 100 dump.atom
+#nveで系を設定し粒子をminimizeで沈静化させている。minimizeが甘いと超音波信号が不規則に揺れることがある。
+fix 1 all nve
+#fix 1 all nvt temp 0.1 0.1 1
+#Set the last (right end) number to timestep*100. I dont know why but LAMMPS guide told me so.
+#
+#
+#minimize 1.0e-18 1.0e-18 100000 100000
+#
+#delete_atoms group longage
+
+#スナップショットが欲しかったらここのインデントを解除する
+###dump 0 all cfg 10 all.*.cfg mass type xs ys zs id
+###dump_modify 0 element Fe Fe Fe Fe
+#dump_modify 0 element Fe Fe Fe Fe Cu
+
+
+#系の右恥の原子を固定する
+#fix 9 edge recenter INIT INIT INIT
+#系の右端をばっふぁにする
+#fix 9 edge viscos command
+
+############################################################
+variable current_time equal time
+variable w equal $g
+#variable A equal 0.1
+#variable T equal 2.0
+#variable A equal 10.0
+#variable B equal -1*$A
+#variable T equal 200.0
+
+##振幅、周期を定める。
+variable f1 equal 500 #GHz
+variable f2 equal 500
+variable T1 equal 1000/${f1}
+variable T2 equal 1000/${f2}
+variable A1 equal ${T1}/20
+variable B1 equal -1*${A1}
+variable A2 equal ${T2}/20
+variable B2 equal -1*${A2}
+variable Q equal 4*${T2}
+# Q is temporary symbol of 3.5 times T.
+#timestep unit is ps. f = 1000 / T GHz.
+variable omega1 equal 2.0*PI/${T1}
+variable omega2 equal 2.0*PI/${T2}
+#variable freq equal 1/$T
+
+#variable m equal 55.845
+#variable n equal 800
+#variable F equal 96500
+
+#variable z equal 1000
+#variable y equal 0.01
+#variable c equal 2.0*PI/$T*$z*$y
+#variable myx0 atom x
+#variable myx atom ${myx0} + $A*sin(${omega}*time)
+
+###NORMAL MIX SETTING###
+#variable myx equal ${A1}*sin(${omega1}*time)+${A2}*sin(${omega2}*time)
+#variable myv equal ${A1}*cos(${omega1}*time)+${A2}*cos(${omega2}*time)  
+###
+
+###SHG###
+variable myx equal ${A1}*sin(${omega1}*time)
+variable myv equal ${A1}*cos(${omega1}*time)  
+###
+
+fix extra all print 1 "$i $s $d $g $l $f $t $v $e $p" file outp_1.txt
+#the extra output file below should be processed by using OVITO
+###正弦波を導入する。同位相なら$A,逆位相なら$B
+#fix 2 source move variable v_myx NULL NULL v_myv NULL NULL
+##force setting
+#variable frc equal $m*10/$F*v_omega*v_omega*swiggle(0.0,$A,$T)
+#fix 2 source setforce v_frc NULL NULL
+###velocity adjust
+#variable vrc equal -1*v_omega*$A
+#velocity source set v_vrc NULL NULL
+
+#unfix 2
+#variable w equal (1987.305504+1988.733166)/2-2.855324
+#variable w equal (2535.527712+2536.955374)/2-2.855324
+
+#variable w equal 1985.877842
+#edgeの初期位置を代入する。
+#variable w equal 2003.009786
+##########variable w equal 1987.305504
+variable R equal ${xd}/${wavevel}*100/dt
+#loop
+shell "bash $MYWORK/common_files/delete_restart.sh"
+write_restart *.restart
+run $R 
+shell "bash $MYWORK/common_files/delete_restart.sh"
+write_restart *.restart
+#run 1000
+#velocity buffer set 0.0 0.0 0.0
+#displace_atoms buffer move 0.0 0.0 0.0
+##########variable j equal xcm(edge_buf,x)
+###########variable z equal $j
+# variabel g equal xcm(edge,x)
+
+label run_varts
+### バッファ層の原子を一度消去し、add.latからデータを読み取りもう一度原子を導入する。
+#delete_atoms group buffer
+#read_data   ./Fe.lat
+#read_data   ./add.lat add merge group buffer
+#read_data   ./add.lat add append
+#6の意味がわからな
+#read_data   ./add.lat add append 6 group buffer
+
+#group edge_buf type 7
+#group buffer type 7 8 9
+
+#print('$j')
+#print('$z')
+##########print $j
+##########print $z
+####edgeの原子層の重心位置に対して変位が生じないように原子位置を移動させる。gがedgeの重心位置を表す。
+#print $g
+#print $w
+#variable g equal xcm(edge,x)
+#variable q equal "v_g-v_w"
+#variable q equal $z-$w
+####################1134.27745900039
+#displace_atoms buffer move v_q 0.0 0.0
+variable runsteps equal round(40/dt)
+run ${runsteps}
+shell "bash $MYWORK/common_files/delete_restart.sh"
+write_restart *.restart
+#3.5周期分の波を導入している。導入する波の周波数に合わせて変更する必要がある。
+
+variable O equal $Q+${xd}/${wavevel}*100
+if "${current_time}<$O" then "jump SELF run_varts" &
+else "jump SELF loopBreak"
+label loopBreak
+#unfix 2
+#variable xd equal 3000 #Angstrome
+#variable wavevel equal 6000 #m/s
+#variable O equal floor(${xd}/${wavevel}*100)
+
+#if "${current_time}<$O" then "jump SELF run_varts" &
+#else "jump SELF loopBreak"
+#variable xd equal 3000 #Angstrome
+#variable wavevel equal 6000 #m/s
+#variable last equal floor(${xd}/${wavevel}*100/dt)
+
+#run ${last}
+
+#cscの説明に書いてあることだが、コノのプログラムはSLURMのバッチファイルによって動かす。
+#計算規模によって dev.sh S_M.sh large.sh をうまく使い分けること
+#うまく行けば slurm... というファイル、log.lammps、outp.txt が生成される。
+################################################## 

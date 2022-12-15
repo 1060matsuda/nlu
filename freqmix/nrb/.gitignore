@@ -1,0 +1,7 @@
+log.lammps
+*dump*
+*out*
+*.restart
+*lat*
+*eam*
+

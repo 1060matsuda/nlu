@@ -9,7 +9,7 @@ f2 = config["f2"]
 """GHz"""
 timestep = config["timestep"]
 
-base_file="in.lammps.nonrb.shg"
+base_file="in.lammps.nrb.shg"
 modified_file="./mod_"+base_file
 # %%
 script = "#!/bin/bash\n"

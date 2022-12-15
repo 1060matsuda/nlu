@@ -1,0 +1,4 @@
+*dump*
+slurm*.out
+log.lammps
+

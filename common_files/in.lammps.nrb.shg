@@ -20,11 +20,13 @@ boundary p p p
 #計算量に問題がないのなら0.001[ps]にするのが望ましい。
 #timestep    0.001
 timestep    TIMESTEP_REPLACE_YAML
-read_data   ./Fe.lat
+#read_data   ./Fe.lat
+read_data ../afterboxrelax.cuppt.lat
 
 #ポテンシャルファイルからポテンシャルを与えている。
 pair_style  eam/alloy
-pair_coeff  * * ./FeCuNi.eam.alloy Fe Fe Fe Fe Fe Fe Fe Fe Fe
+pair_coeff  * * ./FeCuNi.eam.alloy Fe Fe Fe Fe Fe Fe Fe Fe Fe Cu
+#pair_coeff  * * ./FeCuNi.eam.alloy Fe Fe Fe Fe Fe Fe Fe Fe Fe 
 #pair_coeff  * * ./new_potential/FeCuNi.eam.alloy Fe Fe Fe Fe Cu
 #mass        *4 ${mass}
 #mass        5 58.454 correct value!!!
@@ -139,14 +141,14 @@ thermo 1
 #run ${relaxationSteps}
 #minimize 1.0e-18 1.0e-18 100000 100000
 
-minimize 1.0e-30 1.0e-30 10000 10000
+minimize 1.0e-18 1.0e-18 10000 10000
 
 fix mm1 all box/relax aniso 0.0 couple yz vmax 0.01
-minimize 1.0e-30 1.0e-30 10000 10000
+minimize 1.0e-18 1.0e-18 10000 10000
 unfix mm1
 #write_data ./afterboxrelax.cuppt.lat
 fix mm2 all nve
-minimize 1.0e-30 1.0e-30 10000 10000
+minimize 1.0e-18 1.0e-18 10000 10000
 unfix mm2
 
 #dump myDump all atom 100 dump.atom
@@ -212,8 +214,8 @@ variable omega2 equal 2.0*PI/${T2}
 ###
 
 ###SHG###
-variable myx equal {$A1}*sin(${omega1}*time)
-variable myv equal {$A1}*cos(${omega1}*time)  
+variable myx equal ${A1}*sin(${omega1}*time)
+variable myv equal ${A1}*cos(${omega1}*time)  
 ###
 
 fix extra all print 1 "$i $s $d $g $l $f $t $v $e $p" file outp_1.txt
@@ -237,10 +239,11 @@ fix 2 source move variable v_myx NULL NULL v_myv NULL NULL
 ##########variable w equal 1987.305504
 variable R equal ${xd}/${wavevel}*100/dt
 #loop
-label run_varts
-shell bash "$MYWORK/common_files/delete_restart.sh"
+shell "bash $MYWORK/common_files/delete_restart.sh"
 write_restart *.restart
 run $R 
+shell "bash $MYWORK/common_files/delete_restart.sh"
+write_restart *.restart
 #run 1000
 #velocity buffer set 0.0 0.0 0.0
 #displace_atoms buffer move 0.0 0.0 0.0
@@ -248,7 +251,7 @@ run $R
 ###########variable z equal $j
 # variabel g equal xcm(edge,x)
 
-
+label run_varts
 ### バッファ層の原子を一度消去し、add.latからデータを読み取りもう一度原子を導入する。
 delete_atoms group buffer
 #read_data   ./Fe.lat
@@ -272,6 +275,10 @@ variable q equal "v_g-v_w"
 #variable q equal $z-$w
 ####################1134.27745900039
 displace_atoms buffer move v_q 0.0 0.0
+variable runsteps equal round(40/dt)
+run ${runsteps}
+shell "bash $MYWORK/common_files/delete_restart.sh"
+write_restart *.restart
 
 #3.5周期分の波を導入している。導入する波の周波数に合わせて変更する必要がある。
 
